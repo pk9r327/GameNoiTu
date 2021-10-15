@@ -1,3 +1,3 @@
 #pragma once
 
-void change_turns(int& player);
+void changeTurns(int& player);

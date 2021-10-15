@@ -10,18 +10,18 @@ public:
 		// Đọc tệp lấy dữ liệu game
 	}
 
-	bool add_word(std::wstring word)
+	bool addWord(std::wstring word)
 	{
 		// Hàm chưa được viết
 		return false;
 	}
 
-	void reset_game()
+	void resetGame()
 	{
 		// Hàm chưa được viết
 	}
 
-	std::wstring get_start_word()
+	std::wstring getStartWord()
 	{
 		// Hàm chưa được viết
 		return L"Test";

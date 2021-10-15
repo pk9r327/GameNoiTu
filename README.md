@@ -8,6 +8,7 @@
 ## Luật code
 - Sử dụng class cho các kiểu dữ liệu, tách riêng mỗi class một tệp header (*.h), phần này mình thường tạo sẵn file header các bạn vào xây dựng tiếp thôi
 - Các thuộc tính nên để tất cả là private (thoả mãn tính đóng gói OOP). Khi cần đọc hay thay đổi bên ngoài làm thêm phương thức hỗ trợ đọc hoặc thay đổi (get..., set...)
+- Các hàm trong GameNoiTu.cpp nên viết dưới hàm main(), sau đó khai báo trong GameNoiTu.h
 
 ### Quy tắc đặt tên biến
 - Tên class đặt theo PascalCase, ví dụ: UserClass, CategoryClass…

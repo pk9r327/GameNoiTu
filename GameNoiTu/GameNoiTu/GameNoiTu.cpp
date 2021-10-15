@@ -24,7 +24,7 @@ int main()
 
 	for (;;)
 	{
-		start_word = game_management.get_start_word();
+		start_word = game_management.getStartWord();
 		bool is_valid = false;
 		while (!is_valid)
 		{
@@ -33,13 +33,13 @@ int main()
 
 			if (input == L"give up")
 			{
-				change_turns(player);
+				changeTurns(player);
 				wprintf(L"Trò chơi kết thúc người chơi %d thắng!\n", player);
-				game_management.reset_game();
+				game_management.resetGame();
 				break;
 			}
 
-			is_valid = game_management.add_word(input);
+			is_valid = game_management.addWord(input);
 			if (!is_valid)
 			{
 				wprintf(L"'%s %s' không có nghĩa, vui lòng thử từ khác!\n",
@@ -47,11 +47,11 @@ int main()
 			}
 		}
 		
-		change_turns(player);
+		changeTurns(player);
 	}
 }
 
-void change_turns(int& player)
+void changeTurns(int& player)
 {
 	if (player == 1)
 	{
