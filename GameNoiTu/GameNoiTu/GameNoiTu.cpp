@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 #include <tuple> // std::ignore
 #include <corecrt_io.h> // _setmode
-#include <fcntl.h> // _O_U8TEXT
+#include <fcntl.h> // _O_WTEXT
 #include "GameNoiTu.h"
 #include "GameManagement.h"
 
@@ -13,41 +13,61 @@ int main()
 	Chuỗi mã hoá Unicode sẽ bắt đâu bằng tiền tố L. Ví dụ: L"Unícódé" */
 
 	// Sử dụng input, output tiếng việt
-	std::ignore = _setmode(_fileno(stdout), _O_U8TEXT);
-	std::ignore = _setmode(_fileno(stdin), _O_U8TEXT);
+	std::ignore = _setmode(_fileno(stdout), _O_WTEXT);
+	std::ignore = _setmode(_fileno(stdin), _O_WTEXT);
 
 	int player = 1;
 	std::wstring input;
 
-	GameManagement game_management;
-	std::wstring start_word;
+	GameManagement gameManagement;
+	std::wstring currentWord;
 
 	for (;;)
 	{
-		start_word = game_management.getStartWord();
-		bool is_valid = false;
-		while (!is_valid)
+		currentWord = gameManagement.getCurrentWord();
+		ErrorAddWord errorAddWord = ErrorAddWord::NoMeaning;
+		while (errorAddWord != ErrorAddWord::None)
 		{
-			wprintf(L"Lượt của người chơi %d: %s ", player, start_word.c_str());
+			wprintf(L"Lượt của người chơi %d: ", player);
+			// Tự động điền từ đầu tiên cho người chơi
+			wprintf(L"%s ", currentWord.c_str());
+
 			std::getline(std::wcin, input);
 
 			if (input == L"give up")
 			{
 				changeTurns(player);
 				wprintf(L"Trò chơi kết thúc người chơi %d thắng!\n", player);
-				game_management.resetGame();
+				gameManagement.resetGame();
 				break;
 			}
 
-			is_valid = game_management.addWord(input);
-			if (!is_valid)
+			wchar_t word[15];
+			swprintf_s(word, 15, L"%s %s", currentWord.c_str(), input.c_str());
+
+			errorAddWord = gameManagement.addWord(word);
+			switch (errorAddWord)
 			{
-				wprintf(L"'%s %s' không có nghĩa, vui lòng thử từ khác!\n",
-					start_word.c_str(), input.c_str());
+			case ErrorAddWord::None:
+				changeTurns(player);
+				break;
+
+			case ErrorAddWord::InvalidStart:
+				wprintf(L"'%s' không bắt đầu bằng '%s', vui lòng thử từ khác!\n", word, currentWord.c_str());
+				break;
+
+			case ErrorAddWord::Exists:
+				wprintf(L"'%s' đã được sử dụng, vui lòng thử từ khác!\n", word);
+				break;
+
+			case ErrorAddWord::NoMeaning:
+				wprintf(L"'%s' không có nghĩa, vui lòng thử từ khác!\n", word);
+				break;
+
+			default:
+				break;
 			}
 		}
-		
-		changeTurns(player);
 	}
 }
 

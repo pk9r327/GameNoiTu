@@ -144,6 +144,8 @@
   <ItemGroup>
     <ClInclude Include="GameManagement.h" />
     <ClInclude Include="GameNoiTu.h" />
+    <ClInclude Include="Node.h" />
+    <ClInclude Include="History.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
