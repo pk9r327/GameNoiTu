@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include "Node.h"
+#include "EncoderTiengViet.h"
 
 class History
 {
@@ -24,7 +25,7 @@ public:
 		head = node;
 		count++;
 	}
-	
+
 	void removeAll()
 	{
 		Node<std::wstring>* node = head;
@@ -40,11 +41,13 @@ public:
 
 	bool isContain(std::wstring x)
 	{
+		EncoderTiengViet* encoderTiengViet = encoderTiengViet->getInstance();
+
 		Node<std::wstring>* node = head;
 
 		while (node != nullptr)
 		{
-			if (node->data == x)
+			if (encoderTiengViet->compareWord(node->data, x))
 				return true;
 
 			node = node->link;

@@ -25,9 +25,6 @@ int main()
 	GameManagement gameManagement;
 	std::wstring currentWord;
 
-	EncoderTiengViet a;
-	a.encodingWordToInt16(L"a");
-
 	for (;;)
 	{
 		currentWord = gameManagement.getCurrentWord();

@@ -2,30 +2,10 @@
 #include <string>
 #include <fstream>
 
+// Use "Singleton design pattern"
 class EncoderTiengViet
 {
 public:
-	EncoderTiengViet()
-	{
-		std::wifstream rf("encoder.txt");
-		rf.imbue(std::locale()); // sử dụng để đọc file Tiếng Việt
-
-		std::wstring line;
-
-		std::getline(rf, line);
-		splitString(line, starts, L",");
-
-		std::getline(rf, line);
-		splitString(line, ends, L",");
-
-		for (int i = 0; i < SIZE_TONES; i++)
-		{
-			std::getline(rf, line);
-			tones[i] = line;
-		}
-
-		rf.close();
-	}
 
 	uint16_t encodingWordToInt16(std::wstring word)
 	{
@@ -52,6 +32,18 @@ public:
 		return result;
 	}
 
+	bool compareWord(std::wstring word1, std::wstring word2)
+	{
+		return encodingWordToInt16(word1) == encodingWordToInt16(word2);
+	}
+
+	static EncoderTiengViet* getInstance()
+	{
+		if (!instance)
+			instance = new EncoderTiengViet;
+		return instance;
+	}
+
 	static void splitString(std::wstring str, std::wstring out[], std::wstring del = L" ")
 	{
 		int start = 0;
@@ -76,6 +68,31 @@ private:
 	std::wstring starts[SIZE_STARTS];
 	std::wstring ends[SIZE_ENDS];
 	std::wstring tones[SIZE_TONES];
+
+	static EncoderTiengViet* instance;
+
+	// Private constructor so that no objects can be created. (Singleton design pattern)
+	EncoderTiengViet()
+	{
+		std::wifstream rf("encoder.txt");
+		rf.imbue(std::locale()); // sử dụng để đọc file Tiếng Việt
+
+		std::wstring line;
+
+		std::getline(rf, line);
+		splitString(line, starts, L",");
+
+		std::getline(rf, line);
+		splitString(line, ends, L",");
+
+		for (int i = 0; i < SIZE_TONES; i++)
+		{
+			std::getline(rf, line);
+			tones[i] = line;
+		}
+
+		rf.close();
+	}
 
 	int removeTone(std::wstring& word)
 	{
@@ -126,3 +143,6 @@ private:
 		return -1;  // not found
 	}
 };
+
+//Initialize pointer to zero so that it can be initialized in first call to getInstance
+EncoderTiengViet* EncoderTiengViet::instance = nullptr;

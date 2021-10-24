@@ -2,7 +2,6 @@
 #include <string>
 #include <fstream>
 #include "History.h"
-#include "EncoderTiengViet.h"
 
 enum class ErrorAddWord
 {
