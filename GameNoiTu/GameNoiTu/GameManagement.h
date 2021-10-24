@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include <string>
-#include <codecvt> // codecvt_utf8
 #include <fstream>
 #include "History.h"
+#include "EncoderTiengViet.h"
 
 enum class ErrorAddWord
 {
@@ -15,11 +15,8 @@ class GameManagement
 public:
 	GameManagement()
 	{
-		// Sử dụng mã hoá UTF-8 để đọc tệp tiếng việt
-		std::locale loc(std::locale(), new std::codecvt_utf8<wchar_t>);
-
 		std::wifstream rf("dic.txt");
-		rf.imbue(loc);
+		rf.imbue(std::locale()); // sử dụng để đọc file Tiếng Việt
 
 		rf.close();
 
@@ -30,7 +27,7 @@ public:
 	ErrorAddWord addWord(std::wstring word)
 	{
 		std::wstring vs[2];
-		splitString(word, vs);
+		EncoderTiengViet::splitString(word, vs);
 
 		if (vs[0] != currentWord)
 		{
@@ -72,18 +69,4 @@ protected:
 
 	History history;
 	std::wstring currentWord;
-
-private:
-	static void splitString(std::wstring str, std::wstring out[], std::wstring del = L" ")
-	{
-		int start = 0;
-		int end = str.find(del);
-		int index = 0;
-		while (end != -1) {
-			out[index++] = str.substr(start, end - start);
-			start = end + del.size();
-			end = str.find(del, start);
-		}
-		out[index++] = str.substr(start, end - start);
-	}
 };

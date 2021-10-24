@@ -16,11 +16,16 @@ int main()
 	std::ignore = _setmode(_fileno(stdout), _O_WTEXT);
 	std::ignore = _setmode(_fileno(stdin), _O_WTEXT);
 
+	// Sử dụng để đọc file, xử lý chuỗi tiếng việt
+	std::locale::global(std::locale("en_US.UTF8"));
+
 	int player = 1;
 	std::wstring input;
 
 	GameManagement gameManagement;
 	std::wstring currentWord;
+
+	EncoderTiengViet();
 
 	for (;;)
 	{

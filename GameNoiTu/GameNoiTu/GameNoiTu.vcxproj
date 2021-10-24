@@ -142,6 +142,7 @@
     <ClCompile Include="GameNoiTu.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="EncoderTiengViet.h" />
     <ClInclude Include="GameManagement.h" />
     <ClInclude Include="GameNoiTu.h" />
     <ClInclude Include="Node.h" />
