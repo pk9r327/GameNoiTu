@@ -12,6 +12,8 @@ int main()
 	wchar_t, std::wstring, std::wcout, wprintf, ... (thường sẽ có chữ w)
 	Chuỗi mã hoá Unicode sẽ bắt đâu bằng tiền tố L. Ví dụ: L"Unícódé" */
 
+	//Test the submitting
+	 
 	// Sử dụng input, output tiếng việt
 	std::ignore = _setmode(_fileno(stdout), _O_WTEXT);
 	std::ignore = _setmode(_fileno(stdin), _O_WTEXT);
