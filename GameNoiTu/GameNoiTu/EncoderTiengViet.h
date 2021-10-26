@@ -32,9 +32,14 @@ public:
 		return result;
 	}
 
-	bool compareWord(std::wstring word1, std::wstring word2)
+	int compareWord(std::wstring word1, std::wstring word2)
 	{
-		return encodingWordToInt16(word1) == encodingWordToInt16(word2);
+		int tmp = (int)encodingWordToInt16(word1) - encodingWordToInt16(word2);
+		if (tmp < 0)
+			return -1;
+		if (tmp == 0)
+			return 0;
+		return 1;
 	}
 
 	static EncoderTiengViet* getInstance()

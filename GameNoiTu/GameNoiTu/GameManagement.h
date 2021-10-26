@@ -33,7 +33,7 @@ public:
 			return ErrorAddWord::InvalidStart;
 		}
 
-		if (history.isContain(word))
+		if (history.isContain(vs[1]))
 		{
 			return ErrorAddWord::Exists;
 		}
@@ -46,10 +46,10 @@ public:
 
 	void resetGame()
 	{
-		history.removeAll();
-
 		currentWord = getStartWord();
 
+		history.removeAll();
+		history.add(currentWord);
 		// Chưa hoàn thành
 	}
 
