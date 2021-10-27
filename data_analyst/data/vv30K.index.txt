@@ -1,3 +1,7 @@
+(Đang) gội đầu (thì) vấn tóc	Olhg	Co
+00-database-info	A	OY
+00-database-short	OY	x
+00-database-url	PJ	BE
 a	QN	P5
 A Bung	QYJK	x
 A Di	QYJ7	B7
@@ -30155,3 +30159,6 @@ yếu lược	Nb0q	Bs
 yếu nhân	Nb2W	CX
 yếu thanh	QYIf	r
 yếu tố	Nb4t	DR
+Za Hung	SmOO	r
+Zn	SmO5	9
+Zuoih	SmP2	t

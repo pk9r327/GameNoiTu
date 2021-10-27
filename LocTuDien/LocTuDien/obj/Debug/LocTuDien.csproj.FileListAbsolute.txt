@@ -1,7 +1,0 @@
-C:\Users\phucp\source\repos\GameNoiTu\LocTuDien\LocTuDien\bin\Debug\LocTuDien.exe.config
-C:\Users\phucp\source\repos\GameNoiTu\LocTuDien\LocTuDien\bin\Debug\LocTuDien.exe
-C:\Users\phucp\source\repos\GameNoiTu\LocTuDien\LocTuDien\bin\Debug\LocTuDien.pdb
-C:\Users\phucp\source\repos\GameNoiTu\LocTuDien\LocTuDien\obj\Debug\LocTuDien.csproj.AssemblyReference.cache
-C:\Users\phucp\source\repos\GameNoiTu\LocTuDien\LocTuDien\obj\Debug\LocTuDien.csproj.CoreCompileInputs.cache
-C:\Users\phucp\source\repos\GameNoiTu\LocTuDien\LocTuDien\obj\Debug\LocTuDien.exe
-C:\Users\phucp\source\repos\GameNoiTu\LocTuDien\LocTuDien\obj\Debug\LocTuDien.pdb
