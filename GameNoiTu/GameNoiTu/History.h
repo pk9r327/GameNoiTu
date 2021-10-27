@@ -50,21 +50,35 @@ public:
 
 	bool add(std::wstring x)
 	{
-		Node<std::wstring>* node = new Node<std::wstring>;
-		node->data = x;
-		node->link = head;
-		head = node;
-		count++;
-		return true;
+		if (isContain(x) == true)
+		{
+			return false;
+		}
+		else
+		{
+			Node<std::wstring>* node = new Node<std::wstring>;
+			node->data = x;
+			node->link = head;
+			head = node;
+			count++;
+			return true;
+		}
 	}
 
 	bool isContain(std::wstring x)
 	{
 		// so sánh từ giống nhau (encoderTiengViet->compareWord(a, b) == 0)
 		EncoderTiengViet* encoderTiengViet = encoderTiengViet->getInstance();
-
 		Node<std::wstring>* node = head;
-
+		while (node != nullptr)
+		{
+			if (encoderTiengViet->compareWord(node->data, x) == 0
+				&& encoderTiengViet->compareWord(node->link->data, head->data))
+			{
+				return true;
+			}
+			node = node->link;
+		}
 
 
 		return false;

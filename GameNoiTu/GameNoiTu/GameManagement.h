@@ -33,7 +33,7 @@ public:
 			return ErrorAddWord::InvalidStart;
 		}
 
-		if (history.isContain(vs[1]))
+		if (history.isContain(vs[1])==true)
 		{
 			return ErrorAddWord::Exists;
 		}
