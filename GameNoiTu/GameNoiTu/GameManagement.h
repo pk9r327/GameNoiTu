@@ -33,13 +33,13 @@ public:
 			return ErrorAddWord::InvalidStart;
 		}
 
-		if (history.isContain(vs[1])==true)
+		if (history.isExists(vs[1])==true)
 		{
 			return ErrorAddWord::Exists;
 		}
 
 		currentWord = vs[1];
-		history.add(word);
+		history.add(vs[1]);
 		return ErrorAddWord::None;
 		// Chưa hoàn thành
 	}
