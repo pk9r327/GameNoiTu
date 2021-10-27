@@ -6,7 +6,6 @@
 class EncoderTiengViet
 {
 public:
-
 	uint16_t encodingWordToInt16(std::wstring word)
 	{
 		int indexStart = -1, indexEnd = -1, tone = -1;
@@ -14,8 +13,10 @@ public:
 
 		tone = removeTone(word);
 
+
+
 		std::wstring start;
-		for (int i = SIZE_STARTS - 1; i >= 0; i--)
+		for (int i = size_starts - 1; i >= 0; i--)
 		{
 			start = starts[i];
 			// Check string start with
@@ -26,7 +27,7 @@ public:
 			}
 		}
 		std::wstring end = word.substr(start.length());
-		indexEnd = binarySearch(ends, SIZE_ENDS, end);
+		indexEnd = binarySearch(ends, size_ends, end);
 
 		uint16_t result = (indexEnd << 8) + (indexStart << 3) + tone;
 		return result;
@@ -63,16 +64,17 @@ public:
 	}
 
 private:
-	static constexpr int SIZE_STARTS = 28;
-	static constexpr int SIZE_ENDS = 135;
-	static constexpr int SIZE_TONES = 12;
-
 	// Sử dụng để xử lý chuỗi Tiếng Việt
 	const std::ctype<wchar_t>& f = std::use_facet<std::ctype<wchar_t>>(std::locale());
 
-	std::wstring starts[SIZE_STARTS];
-	std::wstring ends[SIZE_ENDS];
-	std::wstring tones[SIZE_TONES];
+	int size_specials;
+	int size_starts;
+	int size_ends;
+	int size_tones;
+	std::wstring *specials;
+	std::wstring *starts;
+	std::wstring *ends;
+	std::wstring *tones;
 
 	static EncoderTiengViet* instance;
 
@@ -82,7 +84,18 @@ private:
 		std::wifstream rf("encoder.txt");
 		rf.imbue(std::locale()); // sử dụng để đọc file Tiếng Việt
 
+		rf >> size_specials >> size_starts >> size_ends >> size_tones;
+		rf.ignore();
+
+		specials = new std::wstring[size_specials];
+		starts = new std::wstring[size_starts];
+		ends = new std::wstring[size_ends];
+		tones = new std::wstring[size_tones];
+
 		std::wstring line;
+
+		std::getline(rf, line);
+		splitString(line, specials, L",");
 
 		std::getline(rf, line);
 		splitString(line, starts, L",");
@@ -90,11 +103,8 @@ private:
 		std::getline(rf, line);
 		splitString(line, ends, L",");
 
-		for (int i = 0; i < SIZE_TONES; i++)
-		{
-			std::getline(rf, line);
-			tones[i] = line;
-		}
+		std::getline(rf, line);
+		splitString(line, tones, L",");
 
 		rf.close();
 	}
@@ -104,11 +114,11 @@ private:
 		int lenght = word.size();
 		int tone = 0;
 
-		for (int i = 0; i < lenght; i++)
+		for (int i = lenght - 1; i >= 0; i--)
 		{
 			if (word[i] >= 224)
 			{
-				for (int j = 0; j < 12; j++)
+				for (int j = 0; j < size_tones; j++)
 				{
 					for (int k = 1; k < 6; k++)
 					{
@@ -127,22 +137,22 @@ private:
 
 	int binarySearch(std::wstring words[], int numElems, std::wstring word)
 	{
-		int first = 0,                 //first array element
-			last = numElems - 1,            //last array element
-			middle;                        //mid point of search
+		int first = 0,
+			last = numElems - 1,
+			middle;
 
 		while (first <= last)
 		{
-			middle = (first + last) / 2; //this finds the mid point
+			middle = (first + last) / 2;
 			if (words[middle] == word) {
 				return middle;
 			}
-			else if (words[middle] > word) // if it's in the lower half
+			else if (words[middle] > word)
 			{
 				last = middle - 1;
 			}
 			else {
-				first = middle + 1;                 //if it's in the upper half
+				first = middle + 1;
 			}
 		}
 		return -1;  // not found
