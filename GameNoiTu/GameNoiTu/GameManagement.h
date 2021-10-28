@@ -46,6 +46,8 @@ public:
 
 	void resetGame()
 	{
+		system("CLS");
+
 		currentWord = getStartWord();
 
 		history.removeAll();
@@ -55,8 +57,11 @@ public:
 
 	std::wstring getStartWord()
 	{
-		return L"khởi";
-		// Chưa hoàn thành
+		std::wstring FirstWord;
+		wprintf(L"Vui lòng nhập từ được chọn để bắt đầu trò chơi : ");
+		std::getline(std::wcin, FirstWord);
+		return FirstWord;
+		// Chắc là rồi
 	}
 
 	std::wstring getCurrentWord()
