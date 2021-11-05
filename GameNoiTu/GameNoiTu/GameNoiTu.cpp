@@ -27,6 +27,8 @@ int main()
 	GameManagement gameManagement;
 	std::wstring currentWord;
 
+	//currentWord = gameManagement.getStartWord();
+
 	for (;;)
 	{
 		currentWord = gameManagement.getCurrentWord();
