@@ -1,0 +1,5 @@
+4 27 134 12
+gi,yêm,yên,yêu
+,b,c,ch,d,g,gh,gi,h,k,kh,l,m,n,ng,ngh,nh,ph,q,r,s,t,th,tr,v,x,đ
+a,ac,ach,ai,am,an,ang,anh,ao,ap,at,au,ay,e,em,en,eng,eo,ep,et,i,ia,ich,im,in,inh,ip,it,iu,iêc,iêm,iên,iêng,iêp,iêt,iêu,o,oa,oach,oai,oan,oang,oanh,oat,oay,oc,oe,oi,om,on,ong,op,ot,oăn,oăng,oăt,u,ua,uc,ui,um,un,ung,up,ut,uy,uya,uych,uynh,uyt,uyên,uyêt,uân,uât,uê,uôc,uôi,uôm,uôn,uông,uôt,uơ,y,âc,âm,ân,âng,âp,ât,âu,ây,ê,êch,êm,ên,ênh,êp,êt,êu,ô,ôc,ôi,ôm,ôn,ông,ôp,ôt,ăc,ăm,ăn,ăng,ăp,ăt,ơ,ơi,ơm,ơn,ơp,ơt,ư,ưa,ưc,ưi,ưng,ưt,ưu,ươc,ươi,ươm,ươn,ương,ươp,ươt,ươu
+aáàảãạ,eéèẻẽẹ,iíìỉĩị,oóòỏõọ,uúùủũụ,yýỳỷỹỵ,âấầẩẫậ,êếềểễệ,ôốồổỗộ,ăắằẳẵặ,ơớờởỡợ,ưứừửữự
