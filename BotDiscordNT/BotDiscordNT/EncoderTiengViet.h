@@ -8,19 +8,28 @@ class EncoderTiengViet
 public:
 	uint16_t encodingWordToInt16(std::wstring word)
 	{
+		uint16_t result = UINT16_MAX;
 		int indexStart = -1, indexEnd = -1, tone = -1;
 		f.tolower(&word[0], &word[0] + word.size());
 
 		tone = removeTone(word);
 
-
+		for (int i = 0; i < size_specials; i++)
+		{
+			if (word == specials[i])
+			{
+				indexStart = 31;
+				indexEnd = i;
+				result = (indexEnd << 8) + (indexStart << 3) + tone;
+				return result;
+			}
+		}
 
 		std::wstring start;
 		for (int i = size_starts - 1; i >= 0; i--)
 		{
 			start = starts[i];
-			// Check string start with
-			if (word.compare(0, start.length(), start) == 0)
+			if (word._Starts_with(start))
 			{
 				indexStart = i;
 				break;
@@ -28,8 +37,12 @@ public:
 		}
 		std::wstring end = word.substr(start.length());
 		indexEnd = binarySearch(ends, size_ends, end);
+		
+		if (indexEnd != -1)
+		{
+			result = (indexEnd << 8) + (indexStart << 3) + tone;
+		}
 
-		uint16_t result = (indexEnd << 8) + (indexStart << 3) + tone;
 		return result;
 	}
 

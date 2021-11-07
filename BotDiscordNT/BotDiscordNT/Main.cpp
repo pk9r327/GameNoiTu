@@ -41,13 +41,24 @@ int main()
 		}
 		else if (content._Starts_with(COMMAND_SET)) {
 			std::wstring startWord = content.substr(LENGTH_COMMAND_SET);
-			gameManagement.resetGame(startWord);
-			wchar_t buffer[256];
-			swprintf(buffer, 256, REPLY_COMMAND_SET, startWord.c_str());
-			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
-			bot.message_create(dpp::message(idChannel, reply));
-			printTimeOS();
-			std::wcout << LOG_COMMAND_SET1 << startWord << LOG_COMMAND_SET2;
+			if (gameManagement.resetGame(startWord))
+			{
+				wchar_t buffer[256];
+				swprintf(buffer, 256, REPLY_COMMAND_SET, startWord.c_str());
+				std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+				bot.message_create(dpp::message(idChannel, reply));
+				printTimeOS();
+				std::wcout << LOG_COMMAND_SET1 << startWord << LOG_COMMAND_SET2;
+			}
+			else
+			{
+				wchar_t buffer[256];
+				swprintf(buffer, 256, REPLY_ERROR_COMMAND_SET, startWord.c_str());
+				std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+				bot.message_create(dpp::message(idChannel, reply));
+				printTimeOS();
+				std::wcout << LOG_ERROR_COMMAND_SET1 << startWord << LOG_ERROR_COMMAND_SET2;
+			}
 		}
 		else if (std::count(content.begin(), content.end(), L' ') != 1)
 		{
@@ -69,6 +80,17 @@ int main()
 				bot.message_add_reaction(event.msg->id, idChannel, u8"💯");
 				printTimeOS();
 				std::wcout << LOG_ACCEPT_WORD1 << content << LOG_ACCEPT_WORD2;
+				break;
+			}
+			case ErrorAddWord::CanNotRead:
+			{
+				wchar_t buffer[256];
+				swprintf(buffer, 256, REPLY_ERROR_WORD_CAN_NOT_READ, content.c_str(), currentWord.c_str());
+				std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+				bot.message_delete(event.msg->id, idChannel);
+				bot.message_create(dpp::message(idChannel, reply));
+				printTimeOS();
+				std::wcout << LOG_ERROR_WORD_CAN_NOT_READ1 << content << LOG_ERROR_WORD_CAN_NOT_READ2;
 				break;
 			}
 			case ErrorAddWord::InvalidStart:
@@ -115,15 +137,17 @@ void config()
 	/* TOKEN = "OTA1ODM1ODQ5NzA5NjYyMjA5.YYP3YA.YRcUBf-yBWr_yEgOhZUKKMvegNk"
 	 * IdChannel: 905849241577074728 */
 
-	 //std::wstring tmp;
-	 //std::wcout << L"Input token bot: ";
-	 //std::getline(std::wcin, tmp);
-	 //token = (std::string)CW2AEX(tmp.c_str(), CP_UTF8);
-	 //std::wcout << L"Input ID Channel: ";
-	 //std::wcin >> idChannel;
-	 //std::wcin.ignore(); // ignore "\n"
 	token = "OTA1ODM1ODQ5NzA5NjYyMjA5.YYP3YA.YRcUBf-yBWr_yEgOhZUKKMvegNk";
 	idChannel = 905849241577074728;
+
+	//std::wstring tmp;
+	//std::wcout << L"Input token bot: ";
+	//std::getline(std::wcin, tmp);
+	//token = (std::string)CW2AEX(tmp.c_str(), CP_UTF8);
+	//std::wcout << L"Input ID Channel: ";
+	//std::wcin >> idChannel;
+	//std::wcin.ignore(); // ignore "\n"
+
 }
 
 void printTimeOS()

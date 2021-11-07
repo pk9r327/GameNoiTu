@@ -7,7 +7,7 @@
 
 enum class ErrorAddWord
 {
-	None, InvalidStart, Existed, NoMeaning
+	None, CanNotRead, InvalidStart, Existed, NoMeaning
 };
 
 class GameManagement
@@ -31,9 +31,16 @@ public:
 		EncoderTiengViet::splitString(word, vs);
 
 		EncoderTiengViet* encoderTiengViet = encoderTiengViet->getInstance();
+
 		if (encoderTiengViet->compareWord(vs[0], currentWord) != 0)
 		{
 			return ErrorAddWord::InvalidStart;
+		}
+
+		uint16_t encoded = encoderTiengViet->encodingWordToInt16(vs[1]);
+		if (encoded == UINT16_MAX)
+		{
+			return ErrorAddWord::CanNotRead;
 		}
 
 		if (history.isExists(vs[1]))
@@ -54,11 +61,19 @@ public:
 		// Chưa hoàn thành
 	}
 
-	void resetGame(std::wstring startWord)
+	bool resetGame(std::wstring startWord)
 	{
+		EncoderTiengViet* encoderTiengViet = encoderTiengViet->getInstance();
+		uint16_t encoded = encoderTiengViet->encodingWordToInt16(startWord);
+		if (encoded == UINT16_MAX)
+		{
+			return false;
+		}
+
 		currentWord = startWord;
 		history.removeAll();
 		history.add(currentWord);
+		return true;
 	}
 
 	std::wstring getStartWord()
