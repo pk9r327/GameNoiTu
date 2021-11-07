@@ -7,7 +7,7 @@
 
 enum class ErrorAddWord
 {
-	None, CanNotRead, InvalidStart, Existed, NoMeaning
+	None, InvalidCountWord, CanNotRead, InvalidStart, Existed, NoMeaning
 };
 
 class GameManagement
@@ -27,9 +27,11 @@ public:
 
 	ErrorAddWord addWord(std::wstring word)
 	{
+		if (std::count(word.begin(), word.end(), L' ') != 1)
+			return ErrorAddWord::InvalidCountWord;
+
 		std::wstring vs[2];
 		EncoderTiengViet::splitString(word, vs);
-
 		EncoderTiengViet* encoderTiengViet = encoderTiengViet->getInstance();
 
 		if (encoderTiengViet->compareWord(vs[0], currentWord) != 0)

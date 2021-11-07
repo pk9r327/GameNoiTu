@@ -18,4 +18,5 @@ dpp::snowflake idChannel = 0;
 // => {{ define function }}
 
 void config();
+void performCommand(GameManagement&, dpp::cluster&, std::wstring&, dpp::snowflake);
 void printTimeOS();

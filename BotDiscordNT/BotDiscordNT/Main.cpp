@@ -18,7 +18,7 @@ int main()
 		std::wstring currentWord = gameManagement.getCurrentWord();
 
 		wchar_t buffer[256];
-		swprintf(buffer, 256, WELCOME, currentWord.c_str());
+		swprintf(buffer, 256, REPLY_WELCOME, currentWord.c_str());
 		std::string welcome = (std::string)CW2AEX(buffer, CP_UTF8);
 		bot.message_create(dpp::message(idChannel, welcome));
 		printTimeOS();
@@ -34,99 +34,108 @@ int main()
 			return;
 
 		std::wstring content = (std::wstring)CA2WEX(event.msg->content.c_str(), CP_UTF8);
-		std::wstring currentWord = gameManagement.getCurrentWord();
+		performCommand(gameManagement, bot, content, event.msg->id);
+		});
+	bot.start(false);
+}
 
-		if (content == L"!ping") {
-			bot.message_create(dpp::message(idChannel, "Pong!"));
+void performCommand(GameManagement& gameManagement, dpp::cluster& bot, std::wstring& content, dpp::snowflake idContent)
+{
+	std::wstring currentWord = gameManagement.getCurrentWord();
+
+	if (content._Starts_with(COMMAND_SET)) {
+		std::wstring startWord = content.substr(LENGTH_COMMAND_SET);
+		if (gameManagement.resetGame(startWord))
+		{
+			wchar_t buffer[256];
+			swprintf(buffer, 256, REPLY_COMMAND_SET, startWord.c_str());
+			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+			bot.message_create(dpp::message(idChannel, reply));
+			printTimeOS();
+			std::wcout << LOG_COMMAND_SET1 << startWord << LOG_COMMAND_SET2;
 		}
-		else if (content._Starts_with(COMMAND_SET)) {
-			std::wstring startWord = content.substr(LENGTH_COMMAND_SET);
-			if (gameManagement.resetGame(startWord))
-			{
-				wchar_t buffer[256];
-				swprintf(buffer, 256, REPLY_COMMAND_SET, startWord.c_str());
-				std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
-				bot.message_create(dpp::message(idChannel, reply));
-				printTimeOS();
-				std::wcout << LOG_COMMAND_SET1 << startWord << LOG_COMMAND_SET2;
-			}
-			else
-			{
-				wchar_t buffer[256];
-				swprintf(buffer, 256, REPLY_ERROR_COMMAND_SET, startWord.c_str());
-				std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
-				bot.message_create(dpp::message(idChannel, reply));
-				printTimeOS();
-				std::wcout << LOG_ERROR_COMMAND_SET1 << startWord << LOG_ERROR_COMMAND_SET2;
-			}
+		else
+		{
+			wchar_t buffer[256];
+			swprintf(buffer, 256, REPLY_ERROR_COMMAND_SET, startWord.c_str());
+			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+			bot.message_create(dpp::message(idChannel, reply));
+			printTimeOS();
+			std::wcout << LOG_ERROR_COMMAND_SET1 << startWord << LOG_ERROR_COMMAND_SET2;
 		}
-		else if (std::count(content.begin(), content.end(), L' ') != 1)
+	}
+	else if (content._Starts_with(COMMAND_CHAT))
+	{
+		// Hỗ trợ chat nên không làm gì hết
+	}
+	else {
+
+		ErrorAddWord errorAddWord = gameManagement.addWord(content);
+
+		switch (errorAddWord)
+		{
+		case ErrorAddWord::None:
+		{
+			bot.message_add_reaction(idContent, idChannel, u8"💯");
+			printTimeOS();
+			std::wcout << LOG_ACCEPT_WORD1 << content << LOG_ACCEPT_WORD2;
+			break;
+		}
+		case ErrorAddWord::InvalidCountWord:
 		{
 			wchar_t buffer[256];
 			swprintf(buffer, 256, REPLY_ERROR_COUNT_WORD, content.c_str());
 			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
 			bot.message_create(dpp::message(idChannel, reply));
-			bot.message_delete(event.msg->id, idChannel);
+			bot.message_delete(idContent, idChannel);
 			printTimeOS();
 			std::wcout << LOG_ERROR_COUNT_WORD1 << content << LOG_ERROR_COUNT_WORD2;
+			break;
 		}
-		else {
-			ErrorAddWord errorAddWord = gameManagement.addWord(content);
-
-			switch (errorAddWord)
-			{
-			case ErrorAddWord::None:
-			{
-				bot.message_add_reaction(event.msg->id, idChannel, u8"💯");
-				printTimeOS();
-				std::wcout << LOG_ACCEPT_WORD1 << content << LOG_ACCEPT_WORD2;
-				break;
-			}
-			case ErrorAddWord::CanNotRead:
-			{
-				wchar_t buffer[256];
-				swprintf(buffer, 256, REPLY_ERROR_WORD_CAN_NOT_READ, content.c_str(), currentWord.c_str());
-				std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
-				bot.message_delete(event.msg->id, idChannel);
-				bot.message_create(dpp::message(idChannel, reply));
-				printTimeOS();
-				std::wcout << LOG_ERROR_WORD_CAN_NOT_READ1 << content << LOG_ERROR_WORD_CAN_NOT_READ2;
-				break;
-			}
-			case ErrorAddWord::InvalidStart:
-			{
-				wchar_t buffer[256];
-				swprintf(buffer, 256, REPLY_ERROR_INVALID_STARTWORD, content.c_str(), currentWord.c_str());
-				std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
-				bot.message_delete(event.msg->id, idChannel);
-				bot.message_create(dpp::message(idChannel, reply));
-				printTimeOS();
-				std::wcout << LOG_ERROR_INVALID_STARTWORD1 << content << LOG_ERROR_INVALID_STARTWORD2;
-				break;
-			}
-			case ErrorAddWord::Existed:
-			{
-				wchar_t buffer[256];
-				swprintf(buffer, 256, REPLY_ERROR_WORD_EXISTED, content.c_str());
-				std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
-				bot.message_create(dpp::message(idChannel, reply));
-				bot.message_delete(event.msg->id, idChannel);
-				printTimeOS();
-				std::wcout << LOG_ERROR_WORD_EXISTED1 << content << LOG_ERROR_WORD_EXISTED2;
-				break;
-			}
-			case ErrorAddWord::NoMeaning:
-				break;
-			default:
-				break;
-			}
+		case ErrorAddWord::CanNotRead:
+		{
+			wchar_t buffer[256];
+			swprintf(buffer, 256, REPLY_ERROR_WORD_CAN_NOT_READ, content.c_str(), currentWord.c_str());
+			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+			bot.message_delete(idContent, idChannel);
+			bot.message_create(dpp::message(idChannel, reply));
+			printTimeOS();
+			std::wcout << LOG_ERROR_WORD_CAN_NOT_READ1 << content << LOG_ERROR_WORD_CAN_NOT_READ2;
+			break;
 		}
-		});
-	bot.start(false);
+		case ErrorAddWord::InvalidStart:
+		{
+			wchar_t buffer[256];
+			swprintf(buffer, 256, REPLY_ERROR_INVALID_STARTWORD, content.c_str(), currentWord.c_str());
+			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+			bot.message_delete(idContent, idChannel);
+			bot.message_create(dpp::message(idChannel, reply));
+			printTimeOS();
+			std::wcout << LOG_ERROR_INVALID_STARTWORD1 << content << LOG_ERROR_INVALID_STARTWORD2;
+			break;
+		}
+		case ErrorAddWord::Existed:
+		{
+			wchar_t buffer[256];
+			swprintf(buffer, 256, REPLY_ERROR_WORD_EXISTED, content.c_str());
+			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+			bot.message_create(dpp::message(idChannel, reply));
+			bot.message_delete(idContent, idChannel);
+			printTimeOS();
+			std::wcout << LOG_ERROR_WORD_EXISTED1 << content << LOG_ERROR_WORD_EXISTED2;
+			break;
+		}
+		case ErrorAddWord::NoMeaning:
+			break;
+		default:
+			break;
+		}
+	}
 }
 
 void config()
 {
+	// Nhập xuất Tiếng Việt
 	std::ignore = _setmode(_fileno(stdout), _O_WTEXT);
 	std::ignore = _setmode(_fileno(stdin), _O_WTEXT);
 
@@ -135,7 +144,8 @@ void config()
 
 	// ==> {{ Bot Discord }}
 	/* TOKEN = "OTA1ODM1ODQ5NzA5NjYyMjA5.YYP3YA.YRcUBf-yBWr_yEgOhZUKKMvegNk"
-	 * IdChannel: 905849241577074728 */
+	 * IdLocal: 905849241577074728
+	 * IdGlobal: 906493073872269313 */
 
 	token = "OTA1ODM1ODQ5NzA5NjYyMjA5.YYP3YA.YRcUBf-yBWr_yEgOhZUKKMvegNk";
 	idChannel = 905849241577074728;
