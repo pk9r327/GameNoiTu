@@ -68,6 +68,19 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, std::wstr
 	{
 		// Hỗ trợ chat nên không làm gì hết
 	}
+	else if (content == COMMAND_RESET)
+	{
+		gameManagement.resetGame();
+
+		wchar_t buffer[256];
+		std::wstring startWord = gameManagement.getCurrentWord();
+
+		swprintf(buffer, 256, REPLY_COMMAND_RESET, startWord.c_str());
+		std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+		bot.message_create(dpp::message(idChannel, reply));
+		printTimeOS();
+		std::wcout << LOG_COMMAND_RESET1 << startWord << LOG_COMMAND_RESET2;
+	}
 	else {
 
 		ErrorAddWord errorAddWord = gameManagement.addWord(content);

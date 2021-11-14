@@ -14,7 +14,7 @@ public:
 
 		tone = removeTone(word);
 
-		for (int i = 0; i < size_specials; i++)
+		for (int i = 0; i < sizeSpecials; i++)
 		{
 			if (word == specials[i])
 			{
@@ -26,7 +26,7 @@ public:
 		}
 
 		std::wstring start;
-		for (int i = size_starts - 1; i >= 0; i--)
+		for (int i = sizeStarts - 1; i >= 0; i--)
 		{
 			start = starts[i];
 			if (word._Starts_with(start))
@@ -36,8 +36,8 @@ public:
 			}
 		}
 		std::wstring end = word.substr(start.length());
-		indexEnd = binarySearch(ends, size_ends, end);
-		
+		indexEnd = binarySearch(ends, sizeEnds, end);
+
 		if (indexEnd != -1)
 		{
 			result = (indexEnd << 8) + (indexStart << 3) + tone;
@@ -54,6 +54,12 @@ public:
 		if (tmp == 0)
 			return 0;
 		return 1;
+	}
+
+	std::wstring getRandomStartWord()
+	{
+		int index = rand() % sizeStartWords;
+		return startWords[index];
 	}
 
 	static EncoderTiengViet* getInstance()
@@ -80,30 +86,35 @@ private:
 	// Sử dụng để xử lý chuỗi Tiếng Việt
 	const std::ctype<wchar_t>& f = std::use_facet<std::ctype<wchar_t>>(std::locale());
 
-	int size_specials;
-	int size_starts;
-	int size_ends;
-	int size_tones;
-	std::wstring *specials;
-	std::wstring *starts;
-	std::wstring *ends;
-	std::wstring *tones;
+	int sizeSpecials;
+	int sizeStarts;
+	int sizeEnds;
+	int sizeTones;
+	int sizeStartWords;
+	std::wstring* specials;
+	std::wstring* starts;
+	std::wstring* ends;
+	std::wstring* tones;
+	std::wstring* startWords;
 
 	static EncoderTiengViet* instance;
 
 	// Private constructor so that no objects can be created. (Singleton design pattern)
 	EncoderTiengViet()
 	{
+		/* initialize random seed: */
+		srand(time(NULL));
+
 		std::wifstream rf("encoder.txt");
 		rf.imbue(std::locale()); // sử dụng để đọc file Tiếng Việt
 
-		rf >> size_specials >> size_starts >> size_ends >> size_tones;
-		rf.ignore();
+		rf >> sizeSpecials >> sizeStarts >> sizeEnds >> sizeTones;
+		rf.ignore(); // ignore \n
 
-		specials = new std::wstring[size_specials];
-		starts = new std::wstring[size_starts];
-		ends = new std::wstring[size_ends];
-		tones = new std::wstring[size_tones];
+		specials = new std::wstring[sizeSpecials];
+		starts = new std::wstring[sizeStarts];
+		ends = new std::wstring[sizeEnds];
+		tones = new std::wstring[sizeTones];
 
 		std::wstring line;
 
@@ -120,6 +131,14 @@ private:
 		splitString(line, tones, L",");
 
 		rf.close();
+
+		rf.open("start_word.txt");
+		rf >> sizeStartWords;
+		rf.ignore(); // ignore \n
+
+		startWords = new std::wstring[sizeStartWords];
+		std::getline(rf, line);
+		splitString(line, startWords, L",");
 	}
 
 	int removeTone(std::wstring& word)
@@ -131,7 +150,7 @@ private:
 		{
 			if (word[i] >= 224)
 			{
-				for (int j = 0; j < size_tones; j++)
+				for (int j = 0; j < sizeTones; j++)
 				{
 					for (int k = 1; k < 6; k++)
 					{
