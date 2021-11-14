@@ -139,6 +139,8 @@ private:
 		startWords = new std::wstring[sizeStartWords];
 		std::getline(rf, line);
 		splitString(line, startWords, L",");
+
+		rf.close();
 	}
 
 	int removeTone(std::wstring& word)
