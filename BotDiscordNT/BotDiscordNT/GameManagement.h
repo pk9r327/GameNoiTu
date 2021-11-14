@@ -5,7 +5,7 @@
 
 enum class ErrorAddWord
 {
-	None, InvalidCountWord, CanNotRead, InvalidStart, Existed, NoMeaning
+	None, InvalidPlayer, InvalidCountWord, CanNotRead, InvalidStart, Existed, NoMeaning
 };
 
 class GameManagement
@@ -23,8 +23,11 @@ public:
 		// Chưa hoàn thành
 	}
 
-	ErrorAddWord addWord(std::wstring word)
+	ErrorAddWord addWord(std::wstring word, uint16_t idPlayer)
 	{
+		if (idPlayer == lastIdPlayer)
+			return ErrorAddWord::InvalidPlayer;
+
 		if (std::count(word.begin(), word.end(), L' ') != 1)
 			return ErrorAddWord::InvalidCountWord;
 
@@ -49,6 +52,7 @@ public:
 		}
 
 		currentWord = vs[1];
+		lastIdPlayer = idPlayer;
 		history.add(vs[1]);
 		return ErrorAddWord::None;
 	}
@@ -91,5 +95,5 @@ protected:
 
 	History history;
 	std::wstring currentWord;
-
+	uint64_t lastIdPlayer;
 };

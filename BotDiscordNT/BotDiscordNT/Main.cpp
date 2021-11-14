@@ -26,21 +26,23 @@ int main()
 		});
 
 	bot.on_message_create([&bot](const dpp::message_create_t& event) {
-
-		if (event.msg->channel_id != idChannel)
-			return;
-
-		if (event.msg->author->id == bot.me.id)
-			return;
-
-		std::wstring content = (std::wstring)CA2WEX(event.msg->content.c_str(), CP_UTF8);
-		performCommand(gameManagement, bot, content, event.msg->id);
+		performCommand(gameManagement, bot, event);
 		});
 	bot.start(false);
 }
 
-void performCommand(GameManagement& gameManagement, dpp::cluster& bot, std::wstring& content, dpp::snowflake idContent)
+void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp::message_create_t& event)
 {
+	if (event.msg->channel_id != idChannel)
+		return;
+
+	if (event.msg->author->id == bot.me.id)
+		return;
+
+	std::wstring content = (std::wstring)CA2WEX(event.msg->content.c_str(), CP_UTF8);
+	dpp::snowflake idContent = event.msg->id;
+	dpp::user* author = event.msg->author;
+
 	std::wstring currentWord = gameManagement.getCurrentWord();
 
 	if (content._Starts_with(COMMAND_SET)) {
@@ -83,7 +85,7 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, std::wstr
 	}
 	else {
 
-		ErrorAddWord errorAddWord = gameManagement.addWord(content);
+		ErrorAddWord errorAddWord = gameManagement.addWord(content, author->id);
 
 		switch (errorAddWord)
 		{
@@ -92,6 +94,18 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, std::wstr
 			bot.message_add_reaction(idContent, idChannel, u8"💯");
 			printTimeOS();
 			std::wcout << LOG_ACCEPT_WORD1 << content << LOG_ACCEPT_WORD2;
+			break;
+		}
+		case ErrorAddWord::InvalidPlayer:
+		{
+			wchar_t buffer[256];
+			std::wstring username = (std::wstring)CA2WEX(author->username.c_str(), CP_UTF8);
+			swprintf(buffer, 256, REPLY_ERROR_PLAYER, username.c_str());
+			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+			bot.message_create(dpp::message(idChannel, reply));
+			bot.message_delete(idContent, idChannel);
+			printTimeOS();
+			std::wcout << LOG_ERROR_PLAYER1 << username << LOG_ERROR_PLAYER2;
 			break;
 		}
 		case ErrorAddWord::InvalidCountWord:
@@ -167,9 +181,9 @@ void config()
 	//std::wcout << L"Input token bot: ";
 	//std::getline(std::wcin, tmp);
 	//token = (std::string)CW2AEX(tmp.c_str(), CP_UTF8);
-	//std::wcout << L"Input ID Channel: ";
-	//std::wcin >> idChannel;
-	//std::wcin.ignore(); // ignore "\n"
+	std::wcout << L"Input ID Channel: ";
+	std::wcin >> idChannel;
+	std::wcin.ignore(); // ignore "\n"
 
 }
 
