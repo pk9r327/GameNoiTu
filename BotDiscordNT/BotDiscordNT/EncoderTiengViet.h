@@ -141,6 +141,13 @@ private:
 		splitString(line, startWords, L",");
 
 		rf.close();
+
+		rf.open("dictionary.txt");
+
+		int size;
+		rf >> size;
+
+		rf.close();
 	}
 
 	int removeTone(std::wstring& word)
