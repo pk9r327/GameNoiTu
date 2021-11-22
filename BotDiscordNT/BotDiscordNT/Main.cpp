@@ -42,7 +42,7 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp
 	std::wstring content = (std::wstring)CA2WEX(event.msg->content.c_str(), CP_UTF8);
 	dpp::snowflake idContent = event.msg->id;
 	dpp::user* author = event.msg->author;
-
+	
 	std::wstring currentWord = gameManagement.getCurrentWord();
 
 	if (content._Starts_with(COMMAND_SET)) {
@@ -82,6 +82,24 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp
 		bot.message_create(dpp::message(idChannel, reply));
 		printTimeOS();
 		std::wcout << LOG_COMMAND_RESET1 << startWord << LOG_COMMAND_RESET2;
+	}
+	else if (content == COMMAND_HELP)
+	{
+		wchar_t buffer[256];
+		swprintf(buffer, 256, REPLY_COMMAND_HELP);
+		std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+		bot.message_create(dpp::message(idChannel, reply));
+		printTimeOS();
+		std::wcout << LOG_COMMAND_HELP;
+	}
+	else if (content == COMMAND_SEE_CURRENT_WORD)
+	{
+		wchar_t buffer[256];
+		swprintf(buffer, 256, REPLY_COMMAND_SEE_CURRENT_WORD, currentWord.c_str());
+		std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+		bot.message_create(dpp::message(idChannel, reply));
+		printTimeOS();
+		std::wcout << LOG_COMMAND_SEE_CURRENT_WORD;
 	}
 	else {
 
