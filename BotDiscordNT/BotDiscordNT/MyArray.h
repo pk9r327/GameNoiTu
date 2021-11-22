@@ -14,12 +14,12 @@ public:
 		delete[] arr;
 	}
 
+
 	T& operator[](int index)
 	{
 		return arr[index];
 	}
 
-private:
-	T* arr;
 	int size;
+	T* arr;
 };

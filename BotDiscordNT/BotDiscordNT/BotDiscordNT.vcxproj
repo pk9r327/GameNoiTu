@@ -146,6 +146,7 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="ArrayBuilder.h" />
     <ClInclude Include="CommonConstants.h" />
     <ClInclude Include="Dictionary.h" />
     <ClInclude Include="EncoderTiengViet.h" />

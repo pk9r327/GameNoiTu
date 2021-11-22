@@ -142,12 +142,7 @@ private:
 
 		rf.close();
 
-		rf.open("dictionary.txt");
-
-		int size;
-		rf >> size;
-
-		rf.close();
+		//dictionary = new Dictionary();
 	}
 
 	int removeTone(std::wstring& word)

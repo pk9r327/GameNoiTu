@@ -3,11 +3,11 @@
 #include "MyArray.h"
 
 template <typename T>
-class ArrayListBuilder
+class ArrayBuilder
 {
 public:
 
-	ArrayListBuilder()
+	ArrayBuilder()
 	{
 		head = nullptr;
 		count = 0;

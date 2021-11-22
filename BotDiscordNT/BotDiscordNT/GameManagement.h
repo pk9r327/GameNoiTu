@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include "History.h"
+#include "Dictionary.h"
 
 enum class ErrorAddWord
 {
@@ -49,6 +50,13 @@ public:
 		if (history.isExists(vs[1]))
 		{
 			return ErrorAddWord::Existed;
+		}
+
+		Dictionary* dictionary = dictionary->getInstance();
+
+		if (!dictionary->checkMeaning(word))
+		{
+			return ErrorAddWord::NoMeaning;
 		}
 
 		currentWord = vs[1];

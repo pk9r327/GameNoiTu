@@ -1,4 +1,5 @@
 ﻿#include "Main.h"
+#include "Dictionary.h"
 
 int main()
 {
@@ -171,7 +172,16 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp
 			break;
 		}
 		case ErrorAddWord::NoMeaning:
+		{
+			wchar_t buffer[256];
+			swprintf(buffer, 256, L"`%ls` không có nghĩa", content.c_str()); //
+			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+			bot.message_create(dpp::message(idChannel, reply));
+			bot.message_delete(idContent, idChannel);
+			printTimeOS();
+			std::wcout << LOG_ERROR_WORD_EXISTED1 << content << LOG_ERROR_WORD_EXISTED2; //
 			break;
+		}
 		default:
 			break;
 		}
@@ -199,9 +209,11 @@ void config()
 	//std::wcout << L"Input token bot: ";
 	//std::getline(std::wcin, tmp);
 	//token = (std::string)CW2AEX(tmp.c_str(), CP_UTF8);
-	std::wcout << L"Input ID Channel: ";
-	std::wcin >> idChannel;
-	std::wcin.ignore(); // ignore "\n"
+
+	// 
+	//std::wcout << L"Input ID Channel: ";
+	//std::wcin >> idChannel;
+	//std::wcin.ignore(); // ignore "\n"
 
 }
 
