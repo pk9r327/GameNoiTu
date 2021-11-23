@@ -3,6 +3,7 @@
 #include <fstream>
 #include "History.h"
 #include "Dictionary.h"
+#include "RandomWord.h"
 
 enum class ErrorAddWord
 {
@@ -26,8 +27,8 @@ public:
 
 	ErrorAddWord addWord(std::wstring word, uint16_t idPlayer)
 	{
-		if (idPlayer == lastIdPlayer)
-			return ErrorAddWord::InvalidPlayer;
+		/*if (idPlayer == lastIdPlayer)
+			return ErrorAddWord::InvalidPlayer;*/
 
 		if (std::count(word.begin(), word.end(), L' ') != 1)
 			return ErrorAddWord::InvalidCountWord;
@@ -47,30 +48,30 @@ public:
 			return ErrorAddWord::CanNotRead;
 		}
 
-		if (history.isExists(vs[1]))
+		Dictionary* dictionary = dictionary->getInstance();
+
+		/*if (!dictionary->checkMeaning(word))
+		{
+			return ErrorAddWord::NoMeaning;
+		}*/
+
+		bool isAddSuccessed = history.add(word);
+		if (isAddSuccessed)
+		{
+			currentWord = vs[1];
+			lastIdPlayer = idPlayer;
+			return ErrorAddWord::None;
+		}
+		else
 		{
 			return ErrorAddWord::Existed;
 		}
-
-		Dictionary* dictionary = dictionary->getInstance();
-
-		if (!dictionary->checkMeaning(word))
-		{
-			return ErrorAddWord::NoMeaning;
-		}
-
-		currentWord = vs[1];
-		lastIdPlayer = idPlayer;
-		history.add(vs[1]);
-		return ErrorAddWord::None;
 	}
 
 	void resetGame()
 	{
 		currentWord = getStartWord();
 		history.removeAll();
-		history.add(currentWord);
-		// Chưa hoàn thành
 	}
 
 	bool resetGame(std::wstring startWord)
@@ -84,14 +85,13 @@ public:
 
 		currentWord = startWord;
 		history.removeAll();
-		history.add(currentWord);
 		return true;
 	}
 
 	std::wstring getStartWord()
 	{
-		EncoderTiengViet* encoderTiengViet = encoderTiengViet->getInstance();
-		return encoderTiengViet->getRandomStartWord();
+		RandomWord* randomWord = randomWord->getInstance();
+		return randomWord->getRandomStartWord();
 	}
 
 	std::wstring getCurrentWord()

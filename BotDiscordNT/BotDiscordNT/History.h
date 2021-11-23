@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <string>
-#include "Node.h"
+#include "TreeNode.h"
 #include "EncoderTiengViet.h"
 
 class History
@@ -8,7 +8,7 @@ class History
 public:
 	History()
 	{
-		head = nullptr;
+		root = nullptr;
 		count = 0;
 	}
 
@@ -19,51 +19,55 @@ public:
 
 	void removeAll()
 	{
-		Node<std::wstring>* node = head;
-
-		while (node != nullptr)
-		{
-			Node<std::wstring>* t = node;
-			node = node->link;
-			delete t;
-		}
-
-		head = nullptr;
-		count = 0;
+		removeAll(root);
 	}
 
 	bool add(std::wstring x)
 	{
-		if (isExists(x))
-			return false;
-
-		Node<std::wstring>* node = new Node<std::wstring>;
-		node->data = x;
-		node->link = head;
-		head = node;
-		count++;
-		return true;
-	}
-
-	bool isExists(std::wstring x)
-	{
 		EncoderTiengViet* encoderTiengViet = encoderTiengViet->getInstance();
-		Node<std::wstring>* node = head;
+		std::wstring vs[2];
+		EncoderTiengViet::splitString(x, vs);
 
-		if (node == nullptr) // history empty
-			return false;
+		uint16_t encode1 = encoderTiengViet->encodingWordToInt16(vs[0]);
+		uint16_t encode2 = encoderTiengViet->encodingWordToInt16(vs[1]);
 
-		while (node->link != nullptr)
+		uint32_t encode = (uint32_t)encode1 << 16 + encode2;
+
+		TreeNode<uint32_t>** treeNode = &root;
+
+		if ((*treeNode) == nullptr)
 		{
-			if (encoderTiengViet->compareWord(node->data, x) == 0
-				&& encoderTiengViet->compareWord(node->link->data, head->data) == 0)
-			{
-				return true;
-			}
-			node = node->link;
+			TreeNode<uint32_t>* T = new TreeNode<uint32_t>;
+			T->data = encode;
+			T->left = nullptr;
+			T->right = nullptr;
+			root = T;
+			return true;
 		}
 
-		return false;
+		while ((*treeNode) != nullptr)
+		{
+			if ((*treeNode)->data == encode)
+			{
+				return false;
+			}
+
+			if ((*treeNode)->data < encode)
+			{
+				treeNode = &((*treeNode)->left);
+			}
+			else
+			{
+				treeNode = &((*treeNode)->right);
+			}
+		}
+
+		(*treeNode) = new TreeNode<uint32_t>;
+		(*treeNode)->data = encode;
+		(*treeNode)->left = nullptr;
+		(*treeNode)->right = nullptr;
+		count++;
+		return true;
 	}
 
 	int getCount()
@@ -71,12 +75,19 @@ public:
 		return count;
 	}
 
-	std::wstring getHead()
-	{
-		return head->data;
-	}
-
 protected:
 	int count;
-	Node<std::wstring>* head;
+	TreeNode<uint32_t>* root;
+
+	void removeAll(TreeNode<uint32_t>*& node)
+	{
+		if (node == nullptr)
+			return;
+
+		removeAll(node->left);
+		removeAll(node->right);
+
+		delete node;
+		node = nullptr;
+	}
 };

@@ -56,12 +56,6 @@ public:
 		return 1;
 	}
 
-	std::wstring getRandomStartWord()
-	{
-		int index = rand() % sizeStartWords;
-		return startWords[index];
-	}
-
 	static EncoderTiengViet* getInstance()
 	{
 		if (!instance)
@@ -90,21 +84,17 @@ private:
 	int sizeStarts;
 	int sizeEnds;
 	int sizeTones;
-	int sizeStartWords;
+
 	std::wstring* specials;
 	std::wstring* starts;
 	std::wstring* ends;
 	std::wstring* tones;
-	std::wstring* startWords;
 
 	static EncoderTiengViet* instance;
 
 	// Private constructor so that no objects can be created. (Singleton design pattern)
 	EncoderTiengViet()
 	{
-		/* initialize random seed: */
-		srand(time(NULL));
-
 		std::wifstream rf("encoder.txt");
 		rf.imbue(std::locale()); // sử dụng để đọc file Tiếng Việt
 
@@ -129,16 +119,6 @@ private:
 
 		std::getline(rf, line);
 		splitString(line, tones, L",");
-
-		rf.close();
-
-		rf.open("start_word.txt");
-		rf >> sizeStartWords;
-		rf.ignore(); // ignore \n
-
-		startWords = new std::wstring[sizeStartWords];
-		std::getline(rf, line);
-		splitString(line, startWords, L",");
 
 		rf.close();
 

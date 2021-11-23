@@ -47,5 +47,11 @@
     <ClInclude Include="ArrayBuilder.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="TreeNode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="RandomWord.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
