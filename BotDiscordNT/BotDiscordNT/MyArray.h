@@ -1,4 +1,9 @@
-#pragma once
+﻿#pragma once
+
+/// <summary>
+/// Danh sách sử dụng mảng đơn giản có kích thước của mảng
+/// </summary>
+/// <typeparam name="T"></typeparam>
 template <typename T>
 class MyArray
 {

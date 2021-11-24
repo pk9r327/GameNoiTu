@@ -1,5 +1,6 @@
 ﻿#include "Main.h"
 #include "Dictionary.h"
+#include <cstdarg>
 
 int main()
 {
@@ -16,7 +17,7 @@ int main()
 	dpp::cluster bot(token);
 
 	bot.on_ready([&bot](const dpp::ready_t& event) {
-		std::wstring currentWord = gameManagement.getCurrentWord();
+		std::wstring currentWord = gameManagement.getCurrentSound();
 
 		wchar_t buffer[256];
 		swprintf(buffer, 256, REPLY_WELCOME, currentWord.c_str());
@@ -34,34 +35,41 @@ int main()
 
 void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp::message_create_t& event)
 {
+	// Kiểm tra channel nhận chat
 	if (event.msg->channel_id != idChannel)
 		return;
 
+	// Bỏ qua lời nhắn từ bot
 	if (event.msg->author->id == bot.me.id)
 		return;
 
+	// Nội dung của tin nhắn
 	std::wstring content = (std::wstring)CA2WEX(event.msg->content.c_str(), CP_UTF8);
+
+	// Id của tin nhắn
 	dpp::snowflake idContent = event.msg->id;
+
+	// Người gửi tin nhắn
 	dpp::user* author = event.msg->author;
 	
-	std::wstring currentWord = gameManagement.getCurrentWord();
+	// Âm bắt đầu hiện tại
+	std::wstring currentSound = gameManagement.getCurrentSound();
+
 
 	if (content._Starts_with(COMMAND_SET)) {
 		std::wstring startWord = content.substr(LENGTH_COMMAND_SET);
 		if (gameManagement.resetGame(startWord))
 		{
-			wchar_t buffer[256];
-			swprintf(buffer, 256, REPLY_COMMAND_SET, startWord.c_str());
-			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+			std::string reply = getString(REPLY_COMMAND_SET, startWord.c_str());
+
 			bot.message_create(dpp::message(idChannel, reply));
 			printTimeOS();
 			std::wcout << LOG_COMMAND_SET1 << startWord << LOG_COMMAND_SET2;
 		}
 		else
 		{
-			wchar_t buffer[256];
-			swprintf(buffer, 256, REPLY_ERROR_COMMAND_SET, startWord.c_str());
-			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+			std::string reply = getString(REPLY_ERROR_COMMAND_SET, startWord.c_str());
+
 			bot.message_create(dpp::message(idChannel, reply));
 			printTimeOS();
 			std::wcout << LOG_ERROR_COMMAND_SET1 << startWord << LOG_ERROR_COMMAND_SET2;
@@ -75,34 +83,30 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp
 	{
 		gameManagement.resetGame();
 
-		wchar_t buffer[256];
-		std::wstring startWord = gameManagement.getCurrentWord();
+		std::wstring startWord = gameManagement.getCurrentSound();
+		std::string reply = getString(REPLY_COMMAND_RESET, startWord.c_str());
 
-		swprintf(buffer, 256, REPLY_COMMAND_RESET, startWord.c_str());
-		std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
 		bot.message_create(dpp::message(idChannel, reply));
 		printTimeOS();
 		std::wcout << LOG_COMMAND_RESET1 << startWord << LOG_COMMAND_RESET2;
 	}
 	else if (content == COMMAND_HELP)
 	{
-		wchar_t buffer[256];
-		swprintf(buffer, 256, REPLY_COMMAND_HELP);
-		std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+		std::string reply = getString(REPLY_COMMAND_HELP);
+
 		bot.message_create(dpp::message(idChannel, reply));
 		printTimeOS();
 		std::wcout << LOG_COMMAND_HELP;
 	}
 	else if (content == COMMAND_SEE_CURRENT_WORD)
 	{
-		wchar_t buffer[256];
-		swprintf(buffer, 256, REPLY_COMMAND_SEE_CURRENT_WORD, currentWord.c_str());
-		std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+		std::string reply = getString(REPLY_COMMAND_SEE_CURRENT_WORD, currentSound.c_str());;
+
 		bot.message_create(dpp::message(idChannel, reply));
 		printTimeOS();
 		std::wcout << LOG_COMMAND_SEE_CURRENT_WORD;
 	}
-	else {
+	else { // content không phải lệnh chương trình, content là đáp án
 
 		ErrorAddWord errorAddWord = gameManagement.addWord(content, author->id);
 
@@ -117,69 +121,69 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp
 		}
 		case ErrorAddWord::InvalidPlayer:
 		{
-			wchar_t buffer[256];
 			std::wstring username = (std::wstring)CA2WEX(author->username.c_str(), CP_UTF8);
-			swprintf(buffer, 256, REPLY_ERROR_PLAYER, username.c_str());
-			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+			std::string reply = getString(REPLY_ERROR_PLAYER, username.c_str());
+
 			bot.message_create(dpp::message(idChannel, reply));
 			bot.message_delete(idContent, idChannel);
+
 			printTimeOS();
 			std::wcout << LOG_ERROR_PLAYER1 << username << LOG_ERROR_PLAYER2;
 			break;
 		}
 		case ErrorAddWord::InvalidCountWord:
 		{
-			wchar_t buffer[256];
-			swprintf(buffer, 256, REPLY_ERROR_COUNT_WORD, content.c_str());
-			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+			std::string reply = getString(REPLY_ERROR_COUNT_WORD, content.c_str());
+
 			bot.message_create(dpp::message(idChannel, reply));
 			bot.message_delete(idContent, idChannel);
+
 			printTimeOS();
 			std::wcout << LOG_ERROR_COUNT_WORD1 << content << LOG_ERROR_COUNT_WORD2;
 			break;
 		}
 		case ErrorAddWord::CanNotRead:
 		{
-			wchar_t buffer[256];
-			swprintf(buffer, 256, REPLY_ERROR_WORD_CAN_NOT_READ, content.c_str(), currentWord.c_str());
-			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+			std::string reply = getString(REPLY_ERROR_WORD_CAN_NOT_READ, content.c_str());
+
 			bot.message_delete(idContent, idChannel);
 			bot.message_create(dpp::message(idChannel, reply));
+
 			printTimeOS();
 			std::wcout << LOG_ERROR_WORD_CAN_NOT_READ1 << content << LOG_ERROR_WORD_CAN_NOT_READ2;
 			break;
 		}
 		case ErrorAddWord::InvalidStart:
 		{
-			wchar_t buffer[256];
-			swprintf(buffer, 256, REPLY_ERROR_INVALID_STARTWORD, content.c_str(), currentWord.c_str());
-			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+			std::string reply = getString(REPLY_ERROR_INVALID_STARTWORD, content.c_str(), currentSound.c_str());
+
 			bot.message_delete(idContent, idChannel);
 			bot.message_create(dpp::message(idChannel, reply));
+
 			printTimeOS();
 			std::wcout << LOG_ERROR_INVALID_STARTWORD1 << content << LOG_ERROR_INVALID_STARTWORD2;
 			break;
 		}
 		case ErrorAddWord::Existed:
 		{
-			wchar_t buffer[256];
-			swprintf(buffer, 256, REPLY_ERROR_WORD_EXISTED, content.c_str());
-			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+			std::string reply = getString(REPLY_ERROR_WORD_EXISTED, content.c_str());
+
 			bot.message_create(dpp::message(idChannel, reply));
 			bot.message_delete(idContent, idChannel);
+
 			printTimeOS();
 			std::wcout << LOG_ERROR_WORD_EXISTED1 << content << LOG_ERROR_WORD_EXISTED2;
 			break;
 		}
 		case ErrorAddWord::NoMeaning:
 		{
-			wchar_t buffer[256];
-			swprintf(buffer, 256, L"`%ls` không có nghĩa", content.c_str()); //
-			std::string reply = (std::string)CW2AEX(buffer, CP_UTF8);
+			std::string reply = getString(REPLY_ERROR_NO_MEANING, content.c_str());
+
 			bot.message_create(dpp::message(idChannel, reply));
 			bot.message_delete(idContent, idChannel);
+
 			printTimeOS();
-			std::wcout << LOG_ERROR_WORD_EXISTED1 << content << LOG_ERROR_WORD_EXISTED2; //
+			std::wcout << LOG_ERROR_WORD_EXISTED1 << content << LOG_ERROR_WORD_EXISTED2;
 			break;
 		}
 		default:
@@ -188,6 +192,26 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp
 	}
 }
 
+/// <summary>
+/// Lấy std::string UTF8 sử dụng format
+/// </summary>
+std::string getString(const wchar_t* _Format, ...)
+{
+	va_list _ArgList;
+	wchar_t buffer[1024];
+
+	__crt_va_start(_ArgList, _Format);
+	_vswprintf_c_l(buffer, 1024, _Format, NULL, _ArgList);
+	__crt_va_end(_ArgList);
+
+	std::string str = (std::string)CW2AEX(buffer, CP_UTF8);
+
+	return str;
+}
+
+/// <summary>
+/// Các cài đặt ban đầu cho chương trình
+/// </summary>
 void config()
 {
 	// Nhập xuất Tiếng Việt
@@ -217,6 +241,9 @@ void config()
 
 }
 
+/// <summary>
+/// In thời gian hiện tại trên console
+/// </summary>
 void printTimeOS()
 {
 	wchar_t tmpbuf[128];

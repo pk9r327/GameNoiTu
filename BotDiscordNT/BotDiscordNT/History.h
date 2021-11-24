@@ -1,8 +1,10 @@
 ﻿#pragma once
-#include <string>
-#include "TreeNode.h"
-#include "EncoderTiengViet.h"
+#include "TreeNode.h" // TreeNode<uint32_t>
+#include "EncoderTiengViet.h" // encodingSoundToInt16
 
+/// <summary>
+/// Lưu trữ các encode của các từ trong màn chơi theo cấu trúc cây nhị phân, các giá trị trong cây là duy nhất
+/// </summary>
 class History
 {
 public:
@@ -17,21 +19,27 @@ public:
 		removeAll();
 	}
 
+	/// <summary>
+	/// Xoá tất cả các node của cây
+	/// </summary>
 	void removeAll()
 	{
-		removeAll(root);
+		remove(root);
 	}
 
-	bool add(std::wstring x)
+	/// <summary>
+	/// Thêm giá trị encode của x vào cây
+	/// </summary>
+	/// <param name="x">Giá trị cần encode và thêm vào</param>
+	/// <returns>
+	///		<para>true: Thêm giá trị thành công</para>
+	///		<para>false: Thêm giá trị không thành công (giá trị đã tồn tại trong cây)</para>
+	/// </returns>
+	bool add(const std::wstring& x)
 	{
 		EncoderTiengViet* encoderTiengViet = encoderTiengViet->getInstance();
-		std::wstring vs[2];
-		EncoderTiengViet::splitString(x, vs);
-
-		uint16_t encode1 = encoderTiengViet->encodingWordToInt16(vs[0]);
-		uint16_t encode2 = encoderTiengViet->encodingWordToInt16(vs[1]);
-
-		uint32_t encode = (uint32_t)encode1 << 16 + encode2;
+		
+		uint32_t encode = encoderTiengViet->encodingWordToInt32(x);
 
 		TreeNode<uint32_t>** treeNode = &root;
 
@@ -75,17 +83,28 @@ public:
 		return count;
 	}
 
-protected:
+private:
+	/// <summary>
+	/// Số lượng phần tử của cây nhị phân (số lượng các từ đã chơi trong màn chơi)
+	/// </summary>
 	int count;
+
+	/// <summary>
+	/// Gốc của cây nhị phân
+	/// </summary>
 	TreeNode<uint32_t>* root;
 
-	void removeAll(TreeNode<uint32_t>*& node)
+	/// <summary>
+	/// Xoá tất một node của cây, các node con của cây cũng sẽ bị xoá
+	/// </summary>
+	/// <param name="node">NodeTree cần xoá</param>
+	void remove(TreeNode<uint32_t>*& node)
 	{
 		if (node == nullptr)
 			return;
 
-		removeAll(node->left);
-		removeAll(node->right);
+		remove(node->left);
+		remove(node->right);
 
 		delete node;
 		node = nullptr;

@@ -6,17 +6,28 @@
 class EncoderTiengViet
 {
 public:
-	uint16_t encodingWordToInt16(std::wstring word)
+
+	/// <summary>
+	/// Mã hoá một âm của tiếng việt thành một số uint16_t
+	/// </summary>
+	/// <param name="sound">Âm cần mã hoá</param>
+	/// <returns>
+	///		<para>Giá trị mã hoá trong đoạn [0, 38877] (mã hoá thành công)</para>
+	///		<para>UINT16_MAX = 0xffffui16 (mã hoá thất bại, âm không hợp lệ)</para>
+	/// </returns>
+	uint16_t encodingSoundToInt16(std::wstring sound)
 	{
 		uint16_t result = UINT16_MAX;
 		int indexStart = -1, indexEnd = -1, tone = -1;
-		f.tolower(&word[0], &word[0] + word.size());
 
-		tone = removeTone(word);
+		// Chuyển tất cả thành chữ thường để so sánh
+		f.tolower(&sound[0], &sound[0] + sound.size());
+
+		tone = removeTone(sound);
 
 		for (int i = 0; i < sizeSpecials; i++)
 		{
-			if (word == specials[i])
+			if (sound == specials[i])
 			{
 				indexStart = 31;
 				indexEnd = i;
@@ -29,13 +40,13 @@ public:
 		for (int i = sizeStarts - 1; i >= 0; i--)
 		{
 			start = starts[i];
-			if (word._Starts_with(start))
+			if (sound._Starts_with(start))
 			{
 				indexStart = i;
 				break;
 			}
 		}
-		std::wstring end = word.substr(start.length());
+		std::wstring end = sound.substr(start.length());
 		indexEnd = binarySearch(ends, sizeEnds, end);
 
 		if (indexEnd != -1)
@@ -45,17 +56,39 @@ public:
 
 		return result;
 	}
-
-	int compareWord(std::wstring word1, std::wstring word2)
+	
+	/// <summary>
+	/// Mã hoá một từ có 2 âm tiết thành một số uint32_t
+	/// </summary>
+	/// <param name="word">Từ cần mã hoá</param>
+	/// <returns>Giá trị mã hoá</returns>
+	uint32_t encodingWordToInt32(const std::wstring& word)
 	{
-		int tmp = (int)encodingWordToInt16(word1) - encodingWordToInt16(word2);
-		if (tmp < 0)
-			return -1;
-		if (tmp == 0)
-			return 0;
-		return 1;
+		std::wstring vs[2];
+		splitString(word, vs);
+
+		uint16_t encode1 = encodingSoundToInt16(vs[0]);
+		uint16_t encode2 = encodingSoundToInt16(vs[1]);
+
+		return (uint32_t)encode1 << 16 + encode2;
 	}
 
+	/// <summary>
+	/// Kiểm tra 2 âm có giống nhau không
+	/// </summary>
+	/// <param name="sound1">Âm thứ nhất</param>
+	/// <param name="sound2">Âm thứ hai</param>
+	/// <returns></returns>
+	bool isEquals(const std::wstring& sound1, const std::wstring& sound2)
+	{
+		return encodingSoundToInt16(sound1) == encodingSoundToInt16(sound2);
+	}
+
+	/// <summary>
+	/// Singleton Instance 
+	/// (đối tượng EncoderTiengViet duy nhất trong suốt quá trình chạy của chương trình)
+	/// </summary>
+	/// <returns></returns>
 	static EncoderTiengViet* getInstance()
 	{
 		if (!instance)
@@ -63,7 +96,14 @@ public:
 		return instance;
 	}
 
-	static void splitString(std::wstring str, std::wstring out[], std::wstring del = L" ")
+	/// <summary>
+	/// Tách chuỗi thành mảng
+	/// </summary>
+	/// <param name="str">Chuỗi cần tách</param>
+	/// <param name="out">Mảng xuất ra sau khi tách</param>
+	/// <param name="del">Chuỗi ngăn cách</param>
+	static void splitString(const std::wstring& str, std::wstring out[],
+		const std::wstring& del = L" ")
 	{
 		int start = 0;
 		int end = str.find(del);
@@ -80,17 +120,49 @@ private:
 	// Sử dụng để xử lý chuỗi Tiếng Việt
 	const std::ctype<wchar_t>& f = std::use_facet<std::ctype<wchar_t>>(std::locale());
 
+#pragma region SizeArray
+	/// <summary>
+	/// Số lượng các âm đặc biệt của tiếng việt
+	/// </summary>
 	int sizeSpecials;
+
+	/// <summary>
+	/// Số lượng các chuỗi bắt đầu của âm tiếng việt
+	/// </summary>
 	int sizeStarts;
+
+	/// <summary>
+	/// Số lượng các chuỗi kết thúc của âm tiếng việt
+	/// </summary>
 	int sizeEnds;
+
+	/// <summary>
+	/// Số lượng các chuỗi chứa các ký tự có dấu trong tiếng việt
+	/// </summary>
 	int sizeTones;
+#pragma endregion
 
+#pragma region Array
+	/// <summary>
+	/// Mảng các âm đặc biệt của tiếng việt
+	/// </summary>
 	std::wstring* specials;
-	std::wstring* starts;
-	std::wstring* ends;
-	std::wstring* tones;
 
-	static EncoderTiengViet* instance;
+	/// <summary>
+	/// Mảng các chuỗi bắt đầu của âm tiếng việt
+	/// </summary>
+	std::wstring* starts;
+
+	/// <summary>
+	/// Mảng các chuỗi kết thúc của âm tiếng việt
+	/// </summary>
+	std::wstring* ends;
+
+	/// <summary>
+	/// Mảng các chuỗi chứa các ký tự có dấu trong tiếng việt
+	/// </summary>
+	std::wstring* tones;
+#pragma endregion
 
 	// Private constructor so that no objects can be created. (Singleton design pattern)
 	EncoderTiengViet()
@@ -125,22 +197,27 @@ private:
 		//dictionary = new Dictionary();
 	}
 
-	int removeTone(std::wstring& word)
+	/// <summary>
+	/// Tách dấu của một âm tiếng việt
+	/// </summary>
+	/// <param name="sound">Âm cần tách dấu, sau khi tách sẽ mất dấu</param>
+	/// <returns>Giá trị của dấu</returns>
+	int removeTone(std::wstring& sound)
 	{
-		int lenght = word.size();
+		int lenght = sound.size();
 		int tone = 0;
 
 		for (int i = lenght - 1; i >= 0; i--)
 		{
-			if (word[i] >= 224)
+			if (sound[i] >= 224) // Giá trị bé nhất của một kí tự có dấu
 			{
 				for (int j = 0; j < sizeTones; j++)
 				{
-					for (int k = 1; k < 6; k++)
+					for (int k = 1; k < 6; k++) // Duyệt các kí tự có dấu (trừ dấu thanh)
 					{
-						if (word[i] == tones[j][k])
+						if (sound[i] == tones[j][k])
 						{
-							word[i] = tones[j][0];
+							sound[i] = tones[j][0];
 							tone = k;
 							return tone;
 						}
@@ -151,6 +228,16 @@ private:
 		return tone;
 	}
 
+	/// <summary>
+	/// Tìm kiếm nhị phân của mảng chuỗi đã được sắp xếp tăng dần
+	/// </summary>
+	/// <param name="words">Mảng chuỗi đã được sắp xếp tăng dần</param>
+	/// <param name="numElems">Số lượng phần từ của mảng</param>
+	/// <param name="word">Giá trị cần tìm kiếm</param>
+	/// <returns>
+	///		<para>Vị trí của phần tử trong mảng (tìm thấy)</para>
+	///		<para>Giá trị -1 (không tìm thấy)</para>
+	/// </returns>
 	int binarySearch(std::wstring words[], int numElems, std::wstring word)
 	{
 		int first = 0,
@@ -173,6 +260,8 @@ private:
 		}
 		return -1;  // not found
 	}
+
+	static EncoderTiengViet* instance;
 };
 
 //Initialize pointer to zero so that it can be initialized in first call to getInstance

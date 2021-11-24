@@ -599,14 +599,12 @@ C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\depe
 C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\dependencies\include\dpp-9.0\dpp\commandhandler.h(203): message : see declaration of 'std::unordered_map<std::string,dpp::command_info_t,std::hash<std::string>,std::equal_to<std::string>,std::allocator<std::pair<const std::string,dpp::command_info_t>>>'
 C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\dependencies\include\dpp-9.0\dpp\commandhandler.h(208,27): warning C4251: 'dpp::commandhandler::prefixes': class 'std::vector<std::string,std::allocator<std::string>>' needs to have dll-interface to be used by clients of class 'dpp::commandhandler'
 C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\dependencies\include\dpp-9.0\dpp\discord.h(96): message : see declaration of 'std::vector<std::string,std::allocator<std::string>>'
-C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\EncoderTiengViet.h(69,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\EncoderTiengViet.h(73,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\EncoderTiengViet.h(74,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\EncoderTiengViet.h(130,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
-C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\History.h(34,1): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
-C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\Main.cpp(22,57): warning C4474: 'swprintf' : too many arguments passed for format string
-C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\Main.cpp(22,57): message : placeholders and their parameters expect 0 variadic arguments, but 1 were provided
-C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\Main.cpp(107,69): warning C4244: 'argument': conversion from 'dpp::snowflake' to 'uint16_t', possible loss of data
-C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\Main.cpp(144,91): warning C4474: 'swprintf' : too many arguments passed for format string
-C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\Main.cpp(144,91): message : placeholders and their parameters expect 1 variadic arguments, but 2 were provided
-  BotDiscordNT.vcxproj -> C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\x64\Debug\BotDiscordNT.exe
+C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\EncoderTiengViet.h(73,1): warning C4554: '<<': check operator precedence for possible error; use parentheses to clarify precedence
+C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\EncoderTiengViet.h(109,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\EncoderTiengViet.h(113,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\EncoderTiengViet.h(114,1): warning C4267: '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\EncoderTiengViet.h(207,1): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\Main.cpp(23,57): warning C4474: 'swprintf' : too many arguments passed for format string
+C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\Main.cpp(23,57): message : placeholders and their parameters expect 0 variadic arguments, but 1 were provided
+C:\Users\phucp\source\repos\pk9rprotein\GameNoiTu\BotDiscordNT\BotDiscordNT\Main.cpp(117,69): warning C4244: 'argument': conversion from 'dpp::snowflake' to 'uint16_t', possible loss of data
+  BotDiscordNT.vcxproj -> C:\Users\phucp\Source\Repos\pk9rprotein\GameNoiTu\BotDiscordNT\x64\Debug\BotDiscordNT.exe

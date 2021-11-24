@@ -1,59 +1,77 @@
 ﻿#pragma once
-#include <time.h>
-#include <stdlib.h>
-#include <fstream>
-#include <string>
-#include "EncoderTiengViet.h"
+#include "EncoderTiengViet.h" // splitString
 #include <random>
 
-class RandomWord
+
+/// <summary>
+/// Sử dụng dữ liệu từ tệp từ điển, chọn âm ngẫu nhiên trong từ điển
+/// </summary>
+class RandomSound
 {
 public:
-	static RandomWord* getInstance()
+
+	/// <summary>
+	/// Singleton Instance 
+	/// (đối tượng RandomSound duy nhất trong suốt quá trình chạy của chương trình)
+	/// </summary>
+	/// <returns></returns>
+	static RandomSound* getInstance()
 	{
 		if (!instance)
-			instance = new RandomWord;
+			instance = new RandomSound;
 		return instance;
 	}
 
-	std::wstring getRandomStartWord()
+	/// <summary>
+	/// Lấy một âm ngẫu nhiên trong từ điển
+	/// </summary>
+	/// <returns></returns>
+	std::wstring getRandomStartSound()
 	{
 		int index = distr(eng);
-		return startWords[index];
+		return startSounds[index];
 	}
 
 private:
-	int sizeStartWords;
 
-	std::wstring* startWords;
+	/// <summary>
+	/// Số lượng phần từ của mảng startWords
+	/// </summary>
+	int sizeStartSounds;
 
-	static RandomWord* instance;
+	/// <summary>
+	/// Mảng chưa các từ bắt đầu trong từ điển
+	/// </summary>
+	std::wstring* startSounds;
+
 
 	std::default_random_engine eng;
 	std::uniform_int_distribution<int> distr;
 
-	RandomWord()
+	static RandomSound* instance;
+
+	RandomSound()
 	{
 		std::wifstream rf("start_word.txt");
 		rf.imbue(std::locale()); // sử dụng để đọc file Tiếng Việt
 
-		rf >> sizeStartWords;
+		rf >> sizeStartSounds;
 		rf.ignore(); // ignore \n
 
 		std::wstring line;
 
-		startWords = new std::wstring[sizeStartWords];
+		startSounds = new std::wstring[sizeStartSounds];
 		std::getline(rf, line);
-		EncoderTiengViet::splitString(line, startWords, L",");
+		EncoderTiengViet::splitString(line, startSounds, L",");
 
 		rf.close();
 
 		std::random_device rd;
 		eng = std::default_random_engine(rd());
-		distr = std::uniform_int_distribution<int>(0, sizeStartWords - 1);
+		distr = std::uniform_int_distribution<int>(0, sizeStartSounds - 1);
 	}
 
 };
 
 //Initialize pointer to zero so that it can be initialized in first call to getInstance
-RandomWord* RandomWord::instance = nullptr;
+RandomSound* RandomSound::instance = nullptr;
