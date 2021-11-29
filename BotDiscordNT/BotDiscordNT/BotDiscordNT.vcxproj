@@ -155,7 +155,7 @@
     <ClInclude Include="Main.h" />
     <ClInclude Include="MyArray.h" />
     <ClInclude Include="Node.h" />
-    <ClInclude Include="RandomWord.h" />
+    <ClInclude Include="RandomSound.h" />
     <ClInclude Include="TreeNode.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

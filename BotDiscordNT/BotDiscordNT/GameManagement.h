@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "History.h" // History
 #include "Dictionary.h" // Dictionary
-#include "RandomWord.h" // RandomWord
+#include "RandomSound.h" // RandomWord
 
 enum class ErrorAddWord
 {
