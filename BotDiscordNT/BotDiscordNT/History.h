@@ -25,6 +25,7 @@ public:
 	void removeAll()
 	{
 		remove(root);
+		count = 0;
 	}
 
 	/// <summary>
@@ -38,7 +39,7 @@ public:
 	bool add(const std::wstring& x)
 	{
 		EncoderTiengViet* encoderTiengViet = encoderTiengViet->getInstance();
-		
+
 		uint32_t encode = encoderTiengViet->encodingWordToInt32(x);
 
 		TreeNode<uint32_t>** treeNode = &root;
@@ -50,6 +51,7 @@ public:
 			T->left = nullptr;
 			T->right = nullptr;
 			root = T;
+			count++;
 			return true;
 		}
 
@@ -76,6 +78,43 @@ public:
 		(*treeNode)->right = nullptr;
 		count++;
 		return true;
+	}
+
+	/// <summary>
+	/// Kiểm tra từ đã tồn tại trong cây trước đó
+	/// </summary>
+	/// <param name="encode"></param>
+	/// <returns>
+	///		<para>true: Giá trị đã tồn tại trong cây</para>
+	///		<para>false: Giá trị chưa tồn tại trong cây</para>
+	/// </returns>
+	bool isExisted(const uint32_t& encode)
+	{
+		TreeNode<uint32_t>** treeNode = &root;
+
+		if ((*treeNode) == nullptr)
+		{
+			return false;
+		}
+
+		while ((*treeNode) != nullptr)
+		{
+			if ((*treeNode)->data == encode)
+			{
+				return true;
+			}
+
+			if ((*treeNode)->data < encode)
+			{
+				treeNode = &((*treeNode)->left);
+			}
+			else
+			{
+				treeNode = &((*treeNode)->right);
+			}
+		}
+
+		return false;
 	}
 
 	int getCount()

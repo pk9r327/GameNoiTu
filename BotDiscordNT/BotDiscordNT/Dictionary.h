@@ -34,7 +34,7 @@ public:
 	///		<para>true:  Từ có nghĩa</para>
 	///		<para>false: Từ vô nghĩa (Từ không có nghĩa)</para>
 	/// </returns>
-	bool checkMeaning(std::wstring word)
+	bool checkMeaning(const std::wstring& word)
 	{
 		EncoderTiengViet* encoderTiengViet = encoderTiengViet->getInstance();
 
@@ -46,6 +46,16 @@ public:
 		if (table[key] != nullptr && binarySearch(table[key]->arr, table[key]->size, x) != -1)
 			return true;
 		return false;
+	}
+
+	/// <summary>
+	/// Lấy danh sách mảng các encode của âm kết thúc
+	/// </summary>
+	/// <param name="index">Mã băm của âm bắt đầu</param>
+	/// <returns></returns>
+	MyArray<uint16_t>* getLastSounds(const int& index)
+	{
+		return table[index];
 	}
 
 private:
@@ -128,8 +138,6 @@ private:
 		}
 		return -1;  // not found
 	}
-
-private:
 
 	/// <summary>
 	///		<para>Buckets của bảng băm</para>

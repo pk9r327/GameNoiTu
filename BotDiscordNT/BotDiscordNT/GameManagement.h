@@ -38,7 +38,12 @@ enum class ErrorAddWord
 	/// <summary>
 	/// Từ không có nghĩa, huỷ kết quả
 	/// </summary>
-	NoMeaning
+	NoMeaning,
+
+	/// <summary>
+	/// Kết thúc trò chơi và tìm được người chiến thắng
+	/// </summary>
+	Victory
 };
 
 /// <summary>
@@ -53,7 +58,7 @@ public:
 		resetGame();
 	}
 
-	ErrorAddWord addWord(std::wstring word, uint16_t idPlayer)
+	ErrorAddWord addWord(const std::wstring& word, const uint64_t& idPlayer)
 	{
 		// Kiểm tra tính hợp lệ của người trả lời
 		if (idPlayer == lastIdPlayer)
@@ -92,7 +97,25 @@ public:
 		{
 			currentSound = vs[1];
 			lastIdPlayer = idPlayer;
-			return ErrorAddWord::None;
+
+			uint16_t encode1 = encoderTiengViet->encodingSoundToInt16(currentSound);
+
+			MyArray<uint16_t>* lastSounds = dictionary->getLastSounds(encode1);
+
+			if (lastSounds != nullptr)
+			{
+				for (int i = 0; i < lastSounds->size; i++)
+				{
+					uint16_t encode2 = (*lastSounds)[i];
+
+					uint32_t encode = encode1 << 16 + encode2;
+
+					if (!history.isExisted(encode))
+						return ErrorAddWord::None;
+				}
+			}
+
+			return ErrorAddWord::Victory;
 		}
 		else
 		{
@@ -118,7 +141,7 @@ public:
 	///		<para>true: Khởi động lại thành công</para>
 	///		<para>false: Khởi động lại không thành công (âm bắt đầu không hợp lệ)</para>
 	/// </returns>
-	bool resetGame(std::wstring startSound)
+	bool resetGame(const std::wstring& startSound)
 	{
 		EncoderTiengViet* encoderTiengViet = encoderTiengViet->getInstance();
 		uint16_t encoded = encoderTiengViet->encodingSoundToInt16(startSound);

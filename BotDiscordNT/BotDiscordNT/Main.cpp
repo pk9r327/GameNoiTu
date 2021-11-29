@@ -16,18 +16,19 @@ int main()
 
 	dpp::cluster bot(token);
 
-	bot.on_ready([&bot](const dpp::ready_t& event) {
-		std::wstring currentWord = gameManagement.getCurrentSound();
-
-		wchar_t buffer[256];
-		swprintf(buffer, 256, REPLY_WELCOME, currentWord.c_str());
-		std::string welcome = (std::string)CW2AEX(buffer, CP_UTF8);
+	bot.on_ready([&bot](const dpp::ready_t& event) { // khi kết nối tới bot thành công
+		std::string welcome = getString(REPLY_WELCOME);;
 		bot.message_create(dpp::message(idChannel, welcome));
+
+		std::wstring currentSound = gameManagement.getCurrentSound();
+		std::string sendCurrentSound = getString(REPLY_COMMAND_SEE_CURRENT_SOUND, currentSound.c_str());;
+		bot.message_create(dpp::message(idChannel, sendCurrentSound));
+
 		printTimeOS();
 		std::wcout << LOG_WELCOME1 << bot.me.username.c_str() << LOG_WELCOME2;
 		});
 
-	bot.on_message_create([&bot](const dpp::message_create_t& event) {
+	bot.on_message_create([&bot](const dpp::message_create_t& event) { // khi bot nhận tin nhắn
 		performCommand(gameManagement, bot, event);
 		});
 	bot.start(false);
@@ -57,22 +58,24 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp
 
 
 	if (content._Starts_with(COMMAND_SET)) {
-		std::wstring startWord = content.substr(LENGTH_COMMAND_SET);
-		if (gameManagement.resetGame(startWord))
+		std::wstring startSound = content.substr(LENGTH_COMMAND_SET);
+		if (gameManagement.resetGame(startSound))
 		{
-			std::string reply = getString(REPLY_COMMAND_SET, startWord.c_str());
+			std::string reply = getString(REPLY_COMMAND_SET, startSound.c_str());
 
 			bot.message_create(dpp::message(idChannel, reply));
+
 			printTimeOS();
-			std::wcout << LOG_COMMAND_SET1 << startWord << LOG_COMMAND_SET2;
+			std::wcout << LOG_COMMAND_SET1 << startSound << LOG_COMMAND_SET2;
 		}
 		else
 		{
-			std::string reply = getString(REPLY_ERROR_COMMAND_SET, startWord.c_str());
+			std::string reply = getString(REPLY_ERROR_COMMAND_SET, startSound.c_str());
 
 			bot.message_create(dpp::message(idChannel, reply));
+
 			printTimeOS();
-			std::wcout << LOG_ERROR_COMMAND_SET1 << startWord << LOG_ERROR_COMMAND_SET2;
+			std::wcout << LOG_ERROR_COMMAND_SET1 << startSound << LOG_ERROR_COMMAND_SET2;
 		}
 	}
 	else if (content._Starts_with(COMMAND_CHAT))
@@ -87,6 +90,7 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp
 		std::string reply = getString(REPLY_COMMAND_RESET, startWord.c_str());
 
 		bot.message_create(dpp::message(idChannel, reply));
+
 		printTimeOS();
 		std::wcout << LOG_COMMAND_RESET1 << startWord << LOG_COMMAND_RESET2;
 	}
@@ -95,16 +99,17 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp
 		std::string reply = getString(REPLY_COMMAND_HELP);
 
 		bot.message_create(dpp::message(idChannel, reply));
+
 		printTimeOS();
 		std::wcout << LOG_COMMAND_HELP;
 	}
 	else if (content == COMMAND_SEE_CURRENT_WORD)
 	{
-		std::string reply = getString(REPLY_COMMAND_SEE_CURRENT_WORD, currentSound.c_str());;
+		std::string reply = getString(REPLY_COMMAND_SEE_CURRENT_SOUND, currentSound.c_str());;
 
 		bot.message_create(dpp::message(idChannel, reply));
 		printTimeOS();
-		std::wcout << LOG_COMMAND_SEE_CURRENT_WORD;
+		std::wcout << LOG_COMMAND_SEE_CURRENT_SOUND;
 	}
 	else { // content không phải lệnh chương trình, content là đáp án
 
@@ -115,6 +120,7 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp
 		case ErrorAddWord::None:
 		{
 			bot.message_add_reaction(idContent, idChannel, u8"💯");
+
 			printTimeOS();
 			std::wcout << LOG_ACCEPT_WORD1 << content << LOG_ACCEPT_WORD2;
 			break;
@@ -133,35 +139,35 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp
 		}
 		case ErrorAddWord::InvalidCountWord:
 		{
-			std::string reply = getString(REPLY_ERROR_COUNT_WORD, content.c_str());
+			std::string reply = getString(REPLY_ERROR_COUNT_SOUNDS, content.c_str());
 
 			bot.message_create(dpp::message(idChannel, reply));
 			bot.message_delete(idContent, idChannel);
 
 			printTimeOS();
-			std::wcout << LOG_ERROR_COUNT_WORD1 << content << LOG_ERROR_COUNT_WORD2;
+			std::wcout << LOG_ERROR_COUNT_SOUNDS1 << content << LOG_ERROR_COUNT_SOUNDS2;
 			break;
 		}
 		case ErrorAddWord::CanNotRead:
 		{
-			std::string reply = getString(REPLY_ERROR_WORD_CAN_NOT_READ, content.c_str());
+			std::string reply = getString(REPLY_ERROR_SOUND_CAN_NOT_READ, content.c_str());
 
 			bot.message_delete(idContent, idChannel);
 			bot.message_create(dpp::message(idChannel, reply));
 
 			printTimeOS();
-			std::wcout << LOG_ERROR_WORD_CAN_NOT_READ1 << content << LOG_ERROR_WORD_CAN_NOT_READ2;
+			std::wcout << LOG_ERROR_SOUND_CAN_NOT_READ1 << content << LOG_ERROR_SOUND_CAN_NOT_READ2;
 			break;
 		}
 		case ErrorAddWord::InvalidStart:
 		{
-			std::string reply = getString(REPLY_ERROR_INVALID_STARTWORD, content.c_str(), currentSound.c_str());
+			std::string reply = getString(REPLY_ERROR_INVALID_STARTSOUND, content.c_str(), currentSound.c_str());
 
 			bot.message_delete(idContent, idChannel);
 			bot.message_create(dpp::message(idChannel, reply));
 
 			printTimeOS();
-			std::wcout << LOG_ERROR_INVALID_STARTWORD1 << content << LOG_ERROR_INVALID_STARTWORD2;
+			std::wcout << LOG_ERROR_INVALID_STARTSOUND1 << content << LOG_ERROR_INVALID_STARTSOUND2;
 			break;
 		}
 		case ErrorAddWord::Existed:
@@ -184,6 +190,26 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp
 
 			printTimeOS();
 			std::wcout << LOG_ERROR_WORD_EXISTED1 << content << LOG_ERROR_WORD_EXISTED2;
+			break;
+		}
+		case ErrorAddWord::Victory:
+		{
+			bot.message_add_reaction(idContent, idChannel, u8"💯");
+
+			std::wstring username = (std::wstring)CA2WEX(author->username.c_str(), CP_UTF8);
+
+			std::string reply = getString(REPLY_ERROR_VICTORY, content.c_str(), username.c_str());
+			bot.message_create(dpp::message(idChannel, reply));
+
+			gameManagement.resetGame();
+
+			std::wstring startWord = gameManagement.getCurrentSound();
+			reply = getString(REPLY_COMMAND_RESET, startWord.c_str());
+
+			bot.message_create(dpp::message(idChannel, reply));
+
+			printTimeOS();
+			std::wcout << LOG_VICTORY;
 			break;
 		}
 		default:
