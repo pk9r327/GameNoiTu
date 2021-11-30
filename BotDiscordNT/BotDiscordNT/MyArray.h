@@ -29,6 +29,17 @@ public:
 		return arr[index];
 	}
 
-	int size;
+	/// <summary>
+	/// Lấy số lượng phần tử của mảng
+	/// </summary>
+	/// <returns></returns>
+	int getSize()
+	{
+		return size;
+	}
+
 	T* arr;
+
+private:
+	int size;
 };

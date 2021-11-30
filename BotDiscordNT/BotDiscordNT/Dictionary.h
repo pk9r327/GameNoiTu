@@ -43,7 +43,7 @@ public:
 
 		uint16_t key = encoderTiengViet->encodingSoundToInt16(vs[0]);
 		uint16_t x = encoderTiengViet->encodingSoundToInt16(vs[1]);
-		if (table[key] != nullptr && binarySearch(table[key]->arr, table[key]->size, x) != -1)
+		if (table[key] != nullptr && binarySearch(table[key]->arr, table[key]->getSize(), x) != -1)
 			return true;
 		return false;
 	}
