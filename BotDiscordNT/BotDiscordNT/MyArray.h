@@ -8,7 +8,7 @@ template <typename T>
 class MyArray
 {
 public:
-	MyArray(int size_)
+	MyArray(const int& size_)
 	{
 		size = size_;
 		arr = new T[size];
@@ -19,8 +19,12 @@ public:
 		delete[] arr;
 	}
 
-
-	T& operator[](int index)
+	/// <summary>
+	/// Truy cập đến một phần tử của mảng
+	/// </summary>
+	/// <param name="index">Thứ tự của phần tử trong mảng</param>
+	/// <returns></returns>
+	T& operator[](const int& index)
 	{
 		return arr[index];
 	}
