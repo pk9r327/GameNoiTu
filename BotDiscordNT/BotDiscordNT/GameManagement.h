@@ -79,7 +79,7 @@ public:
 		}
 
 		// Kiểm tra tính đọc được của từ
-		uint16_t encoded = encoderTiengViet->encodingSoundToInt16(vs[1]);
+		uint16_t encoded = encoderTiengViet->encodingSoundToUInt16(vs[1]);
 		if (encoded == UINT16_MAX)
 		{
 			return ErrorAddWord::CanNotRead;
@@ -98,7 +98,7 @@ public:
 			currentSound = vs[1];
 			lastIdPlayer = idPlayer;
 
-			uint16_t encode1 = encoderTiengViet->encodingSoundToInt16(currentSound);
+			uint16_t encode1 = encoderTiengViet->encodingSoundToUInt16(currentSound);
 
 			MyArray<uint16_t>* lastSounds = dictionary->getLastSounds(encode1);
 
@@ -144,7 +144,7 @@ public:
 	bool resetGame(const std::wstring& startSound)
 	{
 		EncoderTiengViet* encoderTiengViet = encoderTiengViet->getInstance();
-		uint16_t encoded = encoderTiengViet->encodingSoundToInt16(startSound);
+		uint16_t encoded = encoderTiengViet->encodingSoundToUInt16(startSound);
 		if (encoded == UINT16_MAX)
 		{
 			return false;

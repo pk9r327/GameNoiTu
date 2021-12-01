@@ -15,7 +15,7 @@ public:
 	///		<para>Giá trị mã hoá trong đoạn [0, 38877] (mã hoá thành công)</para>
 	///		<para>UINT16_MAX = 0xffffui16 (mã hoá thất bại, âm không hợp lệ)</para>
 	/// </returns>
-	uint16_t encodingSoundToInt16(std::wstring sound)
+	uint16_t encodingSoundToUInt16(std::wstring sound)
 	{
 		uint16_t result = UINT16_MAX;
 		int indexStart = -1, indexEnd = -1, tone = -1;
@@ -70,13 +70,13 @@ public:
 	/// </summary>
 	/// <param name="word">Từ cần mã hoá</param>
 	/// <returns>Giá trị mã hoá</returns>
-	uint32_t encodingWordToInt32(const std::wstring& word)
+	uint32_t encodingWordToUInt32(const std::wstring& word)
 	{
-		std::wstring vs[2];
-		splitString(word, vs);
+		std::wstring sounds[2];
+		splitString(word, sounds);
 
-		uint16_t encode1 = encodingSoundToInt16(vs[0]);
-		uint16_t encode2 = encodingSoundToInt16(vs[1]);
+		uint16_t encode1 = encodingSoundToUInt16(sounds[0]);
+		uint16_t encode2 = encodingSoundToUInt16(sounds[1]);
 
 		return (uint32_t)encode1 << 16 + encode2;
 	}
@@ -89,7 +89,7 @@ public:
 	/// <returns></returns>
 	bool isEquals(const std::wstring& sound1, const std::wstring& sound2)
 	{
-		return encodingSoundToInt16(sound1) == encodingSoundToInt16(sound2);
+		return encodingSoundToUInt16(sound1) == encodingSoundToUInt16(sound2);
 	}
 
 	/// <summary>

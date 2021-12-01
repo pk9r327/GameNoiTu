@@ -41,8 +41,8 @@ public:
 		std::wstring vs[2];
 		EncoderTiengViet::splitString(word, vs, L" ");
 
-		uint16_t key = encoderTiengViet->encodingSoundToInt16(vs[0]);
-		uint16_t x = encoderTiengViet->encodingSoundToInt16(vs[1]);
+		uint16_t key = encoderTiengViet->encodingSoundToUInt16(vs[0]);
+		uint16_t x = encoderTiengViet->encodingSoundToUInt16(vs[1]);
 		if (buckets[key] != nullptr && binarySearch(buckets[key]->arr, buckets[key]->getSize(), x) != -1)
 			return true;
 		return false;
@@ -90,7 +90,7 @@ private:
 			ArrayBuilder<uint16_t> arrayBuilder;
 			while (tmp == key)
 			{
-				arrayBuilder.add(encoderTiengViet->encodingSoundToInt16(vs[1]));
+				arrayBuilder.add(encoderTiengViet->encodingSoundToUInt16(vs[1]));
 
 				std::getline(rf, line, L',');
 				EncoderTiengViet::splitString(line, vs, L" ");
@@ -154,7 +154,7 @@ private:
 	int hashFunction(const std::wstring& sound)
 	{
 		EncoderTiengViet* encoderTiengViet = encoderTiengViet->getInstance();
-		return encoderTiengViet->encodingSoundToInt16(sound);
+		return encoderTiengViet->encodingSoundToUInt16(sound);
 	}
 };
 

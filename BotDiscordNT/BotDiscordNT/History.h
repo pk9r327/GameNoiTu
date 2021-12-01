@@ -40,7 +40,7 @@ public:
 	{
 		EncoderTiengViet* encoderTiengViet = encoderTiengViet->getInstance();
 
-		uint32_t encode = encoderTiengViet->encodingWordToInt32(x);
+		uint32_t encode = encoderTiengViet->encodingWordToUInt32(x);
 
 		TreeNode<uint32_t>** treeNode = &root;
 
