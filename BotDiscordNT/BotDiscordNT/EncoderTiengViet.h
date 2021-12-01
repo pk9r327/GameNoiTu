@@ -25,15 +25,23 @@ public:
 
 		tone = removeTone(sound);
 
-		for (int i = 0; i < sizeSpecials; i++)
+		//for (int i = 0; i < sizeSpecials; i++)
+		//{
+		//	if (sound == specials[i])
+		//	{
+		//		indexStart = 31;
+		//		indexEnd = i;
+		//		result = (indexEnd << 8) + (indexStart << 3) + tone;
+		//		return result;
+		//	}
+		//}
+
+		indexEnd = binarySearch(specials, sizeSpecials, sound);
+		if (indexEnd != -1)
 		{
-			if (sound == specials[i])
-			{
-				indexStart = 31;
-				indexEnd = i;
-				result = (indexEnd << 8) + (indexStart << 3) + tone;
-				return result;
-			}
+			indexStart = 31;
+			result = (indexEnd << 8) + (indexStart << 3) + tone;
+			return result;
 		}
 
 		std::wstring start;
@@ -238,7 +246,7 @@ private:
 	///		<para>Vị trí của phần tử trong mảng (tìm thấy)</para>
 	///		<para>Giá trị -1 (không tìm thấy)</para>
 	/// </returns>
-	int binarySearch(std::wstring words[], int numElems, std::wstring word)
+	int binarySearch(std::wstring words[], const int& numElems, const std::wstring& word)
 	{
 		int first = 0,
 			last = numElems - 1,

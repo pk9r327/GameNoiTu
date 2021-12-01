@@ -43,7 +43,7 @@ public:
 
 		uint16_t key = encoderTiengViet->encodingSoundToInt16(vs[0]);
 		uint16_t x = encoderTiengViet->encodingSoundToInt16(vs[1]);
-		if (table[key] != nullptr && binarySearch(table[key]->arr, table[key]->getSize(), x) != -1)
+		if (buckets[key] != nullptr && binarySearch(buckets[key]->arr, buckets[key]->getSize(), x) != -1)
 			return true;
 		return false;
 	}
@@ -55,7 +55,7 @@ public:
 	/// <returns></returns>
 	MyArray<uint16_t>* getLastSounds(const int& index)
 	{
-		return table[index];
+		return buckets[index];
 	}
 
 private:
@@ -63,10 +63,10 @@ private:
 
 	Dictionary()
 	{
-		table = new MyArray<uint16_t>*[SIZE_TABLE];
+		buckets = new MyArray<uint16_t>*[SIZE_TABLE];
 		for (int i = 0; i < SIZE_TABLE; i++)
 		{
-			table[i] = nullptr;
+			buckets[i] = nullptr;
 		}
 
 		// Sử dụng Instance EncoderTiengViet
@@ -97,7 +97,7 @@ private:
 				tmp = hashFunction(vs[0]);
 			}
 
-			table[key] = arrayBuilder.toMyArray();
+			buckets[key] = arrayBuilder.toMyArray();
 			key = tmp;
 		}
 
@@ -141,9 +141,9 @@ private:
 
 	/// <summary>
 	///		<para>Buckets của bảng băm</para>
-	///		<para>Là một mảng chứa các con trỏ của một mảng uint16_t</para>
+	///		<para>Là một mảng chứa các mảng uint16_t (con trỏ)</para>
 	/// </summary>
-	MyArray<uint16_t>** table;
+	MyArray<uint16_t>** buckets;
 
 	/// <summary>
 	///		<para>Hàm băm của bảng băm, chuyển một âm thành int</para>
