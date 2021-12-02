@@ -206,7 +206,7 @@ private:
 	}
 
 	/// <summary>
-	/// Tách dấu của một âm tiếng việt
+	/// Thay một kí tự có dấu trong âm bằng kí tự không dấu và trả về giá trị của dấu.
 	/// </summary>
 	/// <param name="sound">Âm cần tách dấu, sau khi tách sẽ mất dấu</param>
 	/// <returns>Giá trị của dấu</returns>
