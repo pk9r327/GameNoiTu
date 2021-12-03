@@ -38,12 +38,12 @@ public:
 	{
 		EncoderTiengViet* encoderTiengViet = encoderTiengViet->getInstance();
 
-		std::wstring vs[2];
-		EncoderTiengViet::splitString(word, vs, L" ");
+		std::wstring sounds[2];
+		EncoderTiengViet::splitString(word, sounds, L" ");
 
-		uint16_t key = encoderTiengViet->encodingSoundToUInt16(vs[0]);
-		uint16_t x = encoderTiengViet->encodingSoundToUInt16(vs[1]);
-		if (buckets[key] != nullptr && binarySearch(buckets[key]->arr, buckets[key]->getSize(), x) != -1)
+		uint16_t key = hashFunction(sounds[0]);
+		uint16_t value = encoderTiengViet->encodingSoundToUInt16(sounds[1]);
+		if (buckets[key] != nullptr && binarySearch(buckets[key]->arr, buckets[key]->getSize(), value) != -1)
 			return true;
 		return false;
 	}
@@ -61,6 +61,9 @@ public:
 private:
 	static Dictionary* instance;
 
+	/// <summary>
+	/// Đọc tệp, khởi tạo dữ liệu cho bảng băm
+	/// </summary>
 	Dictionary()
 	{
 		buckets = new MyArray<uint16_t>*[SIZE_TABLE];
@@ -75,26 +78,26 @@ private:
 		std::wifstream rf("dictionary.txt");
 		rf.imbue(std::locale()); // sử dụng để đọc file Tiếng Việt
 
-		std::wstring line;
-		std::wstring vs[2];
+		std::wstring word;
+		std::wstring sounds[2];
 		int key = 0;
 		int tmp = 0;
 
 		/// Đọc dữ liệu từ tệp
-		std::getline(rf, line, L',');
-		EncoderTiengViet::splitString(line, vs, L" ");
-		tmp = hashFunction(vs[0]);
+		std::getline(rf, word, L',');
+		EncoderTiengViet::splitString(word, sounds, L" ");
+		tmp = hashFunction(sounds[0]);
 
 		while (!rf.eof())
 		{
 			ArrayBuilder<uint16_t> arrayBuilder;
 			while (tmp == key)
 			{
-				arrayBuilder.add(encoderTiengViet->encodingSoundToUInt16(vs[1]));
+				arrayBuilder.add(encoderTiengViet->encodingSoundToUInt16(sounds[1]));
 
-				std::getline(rf, line, L',');
-				EncoderTiengViet::splitString(line, vs, L" ");
-				tmp = hashFunction(vs[0]);
+				std::getline(rf, word, L',');
+				EncoderTiengViet::splitString(word, sounds, L" ");
+				tmp = hashFunction(sounds[0]);
 			}
 
 			buckets[key] = arrayBuilder.toMyArray();
