@@ -14,6 +14,8 @@ constexpr auto LOG_COMMAND_HELP = L"Hiện thị hướng dẫn\n";
 
 constexpr auto LOG_COMMAND_INFO = L"Hiện thị thông tin màn chơi\n";
 
+constexpr auto LOG_COMMAND_NO_CHECK_PLAYER = L" cho phép người chơi trả lời liên tiếp nhiều lần\n";
+
 constexpr auto LOG_ERROR_COMMAND_SET1 = L"Huỷ lệnh `!set ";
 constexpr auto LOG_ERROR_COMMAND_SET2 = L"` vì âm cài đặt không hợp lệ\n";
 
@@ -29,8 +31,11 @@ constexpr auto LOG_ERROR_SOUND_CAN_NOT_READ2 = L"` âm sử dụng không hợp 
 constexpr auto LOG_ERROR_INVALID_STARTSOUND1 = L"Huỷ đáp án `";
 constexpr auto LOG_ERROR_INVALID_STARTSOUND2 = L"` vì âm bắt đầu không hợp lệ\n";
 
-constexpr auto LOG_ERROR_WORD_EXISTED1 = L"Huỷ đáp án`";
+constexpr auto LOG_ERROR_WORD_EXISTED1 = L"Huỷ đáp án `";
 constexpr auto LOG_ERROR_WORD_EXISTED2 = L"` vì từ đã được sử dụng\n";
+
+constexpr auto LOG_ERROR_WORD_NOMEANING1 = L"Huỷ đáp án `";
+constexpr auto LOG_ERROR_WORD_NOMEANING2 = L"` vì từ không có nghĩa\n";
 
 constexpr auto LOG_ACCEPT_WORD1 = L"Chấp nhận đáp án `";
 constexpr auto LOG_ACCEPT_WORD2 = L"`\n";
@@ -66,11 +71,14 @@ constexpr auto REPLY_COMMAND_HELP =
 L"< Các lệnh của Pk9rNT >\n\
 `!set <StartSound>`: Thiết lập âm <StartSound> thành âm để bắt đầu trò chơi\n\
 `!info`: Xem thông tin hiện tại của trò chơi\n\
-`!reset`: Bắt đầu lại trò chơi";
+`!reset`: Bắt đầu lại trò chơi\n\
+`!nocheckplayer`: Bật/Tắt cho phép người chơi trả lời liên tiếp nhiều lần";
 
 constexpr auto REPLY_COMMAND_INFO =
 L"Âm bắt đầu hiện tại: `%ls`\n\
 Lượt chơi thứ: %d";
+
+constexpr auto REPLY_COMMAND_NO_CHECK_PLAYER = L"%ls cho phép người chơi trả lời liên tiếp nhiều lần";
 #pragma endregion
 
 
@@ -81,5 +89,6 @@ constexpr auto COMMAND_CHAT = L"> ";
 constexpr auto COMMAND_RESET = L"!reset";
 constexpr auto COMMAND_INFO = L"!info";
 constexpr auto COMMAND_HELP = L"!help";
+constexpr auto COMMAND_NO_CHECK_PLAYER = L"!nocheckplayer";
 #pragma endregion
 

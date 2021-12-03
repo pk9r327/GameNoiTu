@@ -53,16 +53,22 @@ class GameManagement
 {
 
 public:
+	/// <summary>
+	/// Điều kiện kiểm tra chơi người chơi
+	/// </summary>
+	bool isCheckPlayer;
+
 	GameManagement()
 	{
+		isCheckPlayer = true;
 		resetGame();
 	}
 
 	ErrorAddWord addWord(const std::wstring& word, const uint64_t& idPlayer)
 	{
-		//// Kiểm tra tính hợp lệ của người trả lời
-		//if (idPlayer == lastIdPlayer)
-		//	return ErrorAddWord::InvalidPlayer;
+		// Kiểm tra tính hợp lệ của người trả lời
+		if (isCheckPlayer && idPlayer == lastIdPlayer)
+			return ErrorAddWord::InvalidPlayer;
 
 		// Kiểm tra số âm tiết của từ
 		if (std::count(word.begin(), word.end(), L' ') != 1)
