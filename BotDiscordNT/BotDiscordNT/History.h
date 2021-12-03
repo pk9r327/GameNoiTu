@@ -29,22 +29,20 @@ public:
 	}
 
 	/// <summary>
-	/// Thêm giá trị encode của x vào cây
+	/// Thêm giá trị encode của word vào cây
 	/// </summary>
-	/// <param name="x">Giá trị cần encode và thêm vào</param>
+	/// <param name="word">Giá trị cần encode và thêm vào</param>
 	/// <returns>
 	///		<para>true: Thêm giá trị thành công</para>
 	///		<para>false: Thêm giá trị không thành công (giá trị đã tồn tại trong cây)</para>
 	/// </returns>
-	bool add(const std::wstring& x)
+	bool add(const std::wstring& word)
 	{
 		EncoderTiengViet* encoderTiengViet = encoderTiengViet->getInstance();
 
-		uint32_t encode = encoderTiengViet->encodingWordToUInt32(x);
+		uint32_t encode = encoderTiengViet->encodingWordToUInt32(word);
 
-		TreeNode<uint32_t>** treeNode = &root;
-
-		if ((*treeNode) == nullptr)
+		if (root == nullptr)
 		{
 			TreeNode<uint32_t>* T = new TreeNode<uint32_t>;
 			T->data = encode;
@@ -54,6 +52,8 @@ public:
 			count++;
 			return true;
 		}
+
+		TreeNode<uint32_t>** treeNode = &root;
 
 		while ((*treeNode) != nullptr)
 		{

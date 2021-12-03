@@ -114,7 +114,7 @@ public:
 				{
 					uint16_t encode2 = (*lastSounds)[i];
 
-					uint32_t encode = encode1 << 16 + encode2;
+					uint32_t encode = (encode1 << 16) + encode2;
 
 					if (!history.isExisted(encode))
 						return ErrorAddWord::None;

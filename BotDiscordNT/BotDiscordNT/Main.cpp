@@ -21,8 +21,9 @@ int main()
 		bot.message_create(dpp::message(idChannel, welcome));
 
 		std::wstring currentSound = gameManagement.getCurrentSound();
-		std::string sendCurrentSound = getString(REPLY_COMMAND_SEE_CURRENT_SOUND, currentSound.c_str());;
-		bot.message_create(dpp::message(idChannel, sendCurrentSound));
+		int turn = gameManagement.history.getCount() + 1;
+		std::string reply = getString(REPLY_COMMAND_INFO, currentSound.c_str(), turn);
+		bot.message_create(dpp::message(idChannel, reply));
 
 		printTimeOS();
 		std::wcout << LOG_WELCOME1 << bot.me.username.c_str() << LOG_WELCOME2;
@@ -52,7 +53,7 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp
 
 	// Người gửi tin nhắn
 	dpp::user* author = event.msg->author;
-	
+
 	// Âm bắt đầu hiện tại
 	std::wstring currentSound = gameManagement.getCurrentSound();
 
@@ -86,13 +87,15 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp
 	{
 		gameManagement.resetGame();
 
-		std::wstring startWord = gameManagement.getCurrentSound();
-		std::string reply = getString(REPLY_COMMAND_RESET, startWord.c_str());
+		std::wstring currentSound = gameManagement.getCurrentSound();
+		int turn = gameManagement.history.getCount() + 1;
+
+		std::string reply = getString(REPLY_COMMAND_INFO, currentSound.c_str(), turn, "");
 
 		bot.message_create(dpp::message(idChannel, reply));
 
 		printTimeOS();
-		std::wcout << LOG_COMMAND_RESET1 << startWord << LOG_COMMAND_RESET2;
+		std::wcout << LOG_COMMAND_RESET1 << currentSound << LOG_COMMAND_RESET2;
 	}
 	else if (content == COMMAND_HELP)
 	{
@@ -103,13 +106,24 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp
 		printTimeOS();
 		std::wcout << LOG_COMMAND_HELP;
 	}
-	else if (content == COMMAND_SEE_CURRENT_WORD)
+	else if (content == COMMAND_INFO)
 	{
-		std::string reply = getString(REPLY_COMMAND_SEE_CURRENT_SOUND, currentSound.c_str());;
+		int turn = gameManagement.history.getCount() + 1;
+		std::string reply = getString(REPLY_COMMAND_INFO, currentSound.c_str(), turn);
 
 		bot.message_create(dpp::message(idChannel, reply));
 		printTimeOS();
-		std::wcout << LOG_COMMAND_SEE_CURRENT_SOUND;
+		std::wcout << LOG_COMMAND_INFO;
+	}
+	else if (content == COMMAND_NO_CHECK_PLAYER)
+	{
+		gameManagement.isCheckPlayer = !gameManagement.isCheckPlayer;
+		const wchar_t* status = (gameManagement.isCheckPlayer ? L"Bật" : L"Tắt");
+		std::string reply = getString(REPLY_COMMAND_NO_CHECK_PLAYER, status);
+
+		bot.message_create(dpp::message(idChannel, reply));
+		printTimeOS();
+		std::wcout << status << LOG_COMMAND_NO_CHECK_PLAYER;
 	}
 	else { // content không phải lệnh chương trình, content là đáp án
 
@@ -189,7 +203,7 @@ void performCommand(GameManagement& gameManagement, dpp::cluster& bot, const dpp
 			bot.message_delete(idContent, idChannel);
 
 			printTimeOS();
-			std::wcout << LOG_ERROR_WORD_EXISTED1 << content << LOG_ERROR_WORD_EXISTED2;
+			std::wcout << LOG_ERROR_WORD_NOMEANING1 << content << LOG_ERROR_WORD_NOMEANING2;
 			break;
 		}
 		case ErrorAddWord::Victory:
@@ -260,7 +274,6 @@ void config()
 	//std::getline(std::wcin, tmp);
 	//token = (std::string)CW2AEX(tmp.c_str(), CP_UTF8);
 
-	// 
 	//std::wcout << L"Input ID Channel: ";
 	//std::wcin >> idChannel;
 	//std::wcin.ignore(); // ignore "\n"
