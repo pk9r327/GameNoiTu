@@ -108,6 +108,12 @@ private:
 	}
 
 	/// <summary>
+	///		<para>Buckets của bảng băm</para>
+	///		<para>Là một mảng chứa các mảng uint16_t (con trỏ)</para>
+	/// </summary>
+	MyArray<uint16_t>** buckets;
+
+	/// <summary>
 	///		Tìm kiếm nhị phân trong mảng uint16_t đã được sắp xếp tăng dần
 	/// </summary>
 	/// 
@@ -119,7 +125,7 @@ private:
 	///		<para>Vị trí của phần tử trong mảng (tìm thấy)</para>
 	///		<para>Giá trị -1 (không tìm thấy)</para>
 	/// </returns>
-	int binarySearch(uint16_t arr[], int numElems, uint16_t value)
+	int binarySearch(uint16_t arr[], const int& numElems, const uint16_t& value)
 	{
 		int first = 0,
 			last = numElems - 1,
@@ -142,15 +148,10 @@ private:
 		return -1;  // not found
 	}
 
-	/// <summary>
-	///		<para>Buckets của bảng băm</para>
-	///		<para>Là một mảng chứa các mảng uint16_t (con trỏ)</para>
-	/// </summary>
-	MyArray<uint16_t>** buckets;
 
 	/// <summary>
 	///		<para>Hàm băm của bảng băm, chuyển một âm thành int</para>
-	///		<para>Là hàm băm hoàn hảo, không có va chạm</para>
+	///		<para>Là hàm băm không có va chạm</para>
 	/// </summary>
 	/// <param name="sound">Âm thanh cần băm</param>
 	/// <returns>Giá trị băm</returns>
