@@ -13,7 +13,7 @@ public:
 
 	ArrayBuilder()
 	{
-		head = nullptr;
+		tail = nullptr;
 		count = 0;
 	}
 
@@ -21,37 +21,36 @@ public:
 	{
 		Node<T>* node;
 		
-		// Xoá phần từ đầu tiên của danh sách đến khi rỗng
-		while (head != nullptr)
+		// Xoá phần từ cuối cùng của danh sách đến khi rỗng
+		while (tail != nullptr)
 		{
-			node = head;
-			head = node->link;
+			node = tail;
+			tail = node->link;
 			delete node;
 		}
 	}
 
 	/// <summary>
-	/// Thêm một phần tử vào đầu danh sách liên kết đơn
+	/// Thêm một phần tử vào cuối danh sách liên kết đơn
 	/// </summary>
 	/// <param name="x"></param>
 	void add(T x)
 	{
 		Node<T>* node = new Node<T>;
 		node->data = x;
-		node->link = head;
-		head = node;
+		node->link = tail;
+		tail = node;
 		count++;
 	}
 
 	/// <summary>
-	/// Chuyển thành danh sách sử dụng mảng (con trỏ), 
-	/// danh sách mảng trả về sẽ ngược với danh sách liên kết
+	/// Chuyển thành danh sách sử dụng mảng (con trỏ)
 	/// </summary>
 	/// <returns></returns>
 	MyArray<T>* toMyArray()
 	{
 		MyArray<T>* arr = new MyArray<T>(count);
-		Node<T>* node = head;
+		Node<T>* node = tail;
 		for (int i = count - 1; i >= 0; i--)
 		{
 			(*arr)[i] = node->data;
@@ -62,9 +61,9 @@ public:
 
 private:
 	/// <summary>
-	/// Node đầu của danh sách liên kết
+	/// Node cuối của danh sách liên kết
 	/// </summary>
-	Node<T>* head;
+	Node<T>* tail;
 
 	/// <summary>
 	/// Số phần tử trong danh sách liên kết

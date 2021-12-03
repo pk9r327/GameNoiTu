@@ -49,7 +49,7 @@ public:
 	}
 
 	/// <summary>
-	/// Lấy danh sách mảng các encode của âm kết thúc
+	/// Lấy danh sách mảng các encode của các âm kết thúc
 	/// </summary>
 	/// <param name="index">Mã băm của âm bắt đầu</param>
 	/// <returns></returns>

@@ -60,9 +60,9 @@ public:
 
 	ErrorAddWord addWord(const std::wstring& word, const uint64_t& idPlayer)
 	{
-		// Kiểm tra tính hợp lệ của người trả lời
-		if (idPlayer == lastIdPlayer)
-			return ErrorAddWord::InvalidPlayer;
+		//// Kiểm tra tính hợp lệ của người trả lời
+		//if (idPlayer == lastIdPlayer)
+		//	return ErrorAddWord::InvalidPlayer;
 
 		// Kiểm tra số âm tiết của từ
 		if (std::count(word.begin(), word.end(), L' ') != 1)
@@ -104,7 +104,7 @@ public:
 
 			if (lastSounds != nullptr)
 			{
-				for (int i = 0; i < lastSounds->size; i++)
+				for (int i = 0; i < lastSounds->getSize(); i++)
 				{
 					uint16_t encode2 = (*lastSounds)[i];
 
@@ -131,6 +131,7 @@ public:
 		RandomSound* randomSound = randomSound->getInstance();
 		currentSound = randomSound->getRandomStartSound();
 		history.removeAll();
+		lastIdPlayer = 0;
 	}
 
 	/// <summary>
@@ -164,12 +165,12 @@ public:
 		return currentSound;
 	}
 
-private:
-
 	/// <summary>
 	/// Cây chứa mã hoá các từ đã sử dụng trong màn chơi
 	/// </summary>
 	History history;
+
+private:
 
 	/// <summary>
 	/// Âm bắt đầu hiện tại của màn chơi

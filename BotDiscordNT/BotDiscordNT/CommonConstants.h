@@ -10,11 +10,15 @@ constexpr auto LOG_COMMAND_SET2 = L"`\n";
 constexpr auto LOG_COMMAND_RESET1 = L"Bắt đầu lại trò chơi với âm `";
 constexpr auto LOG_COMMAND_RESET2 = L"`\n";
 
+constexpr auto LOG_COMMAND_HELP = L"Hiện thị hướng dẫn\n";
+
+constexpr auto LOG_COMMAND_INFO = L"Hiện thị thông tin màn chơi\n";
+
 constexpr auto LOG_ERROR_COMMAND_SET1 = L"Huỷ lệnh `!set ";
-constexpr auto LOG_ERROR_COMMAND_SET2 = L"` vì âm cài đặt không hợp lệ";
+constexpr auto LOG_ERROR_COMMAND_SET2 = L"` vì âm cài đặt không hợp lệ\n";
 
 constexpr auto LOG_ERROR_PLAYER1 = L"Huỷ đáp án của người chơi `";
-constexpr auto LOG_ERROR_PLAYER2 = L"` vì người chơi đã hết lượt";
+constexpr auto LOG_ERROR_PLAYER2 = L"` vì người chơi đã hết lượt\n";
 
 constexpr auto LOG_ERROR_COUNT_SOUNDS1 = L"Huỷ đáp án `";
 constexpr auto LOG_ERROR_COUNT_SOUNDS2 = L"` vì từ số lượng âm tiết không hợp lệ\n";
@@ -31,11 +35,7 @@ constexpr auto LOG_ERROR_WORD_EXISTED2 = L"` vì từ đã được sử dụng\
 constexpr auto LOG_ACCEPT_WORD1 = L"Chấp nhận đáp án `";
 constexpr auto LOG_ACCEPT_WORD2 = L"`\n";
 
-constexpr auto LOG_VICTORY = L"Kết thúc trò chơi`\n";
-
-constexpr auto LOG_COMMAND_HELP = L"Hiện danh sách lệnh hướng dẫn\n";
-
-constexpr auto LOG_COMMAND_SEE_CURRENT_SOUND = L"Hiện âm bắt đầu cho người chơi\n";
+constexpr auto LOG_VICTORY = L"Kết thúc trò chơi\n";
 #pragma endregion
 
 
@@ -62,9 +62,15 @@ constexpr auto REPLY_ERROR_NO_MEANING = L"`%ls` không có nghĩa, vui lòng th�
 
 constexpr auto REPLY_ERROR_VICTORY = L"Trò chơi đã kết thúc với từ `%ls`, người chiến thắng là `%s`";
 
-constexpr auto REPLY_COMMAND_HELP = L"< Các lệnh của Pk9rNT >\n `!set <StartWord>`\n# Thiết lập từ <StartWord> thành từ để bắt đầu trò chơi\n `!current`\n# Xem từ ngữ bắt đầu hiện tại của trò chơi\n `!reset`\n# Reset trò chơi";
+constexpr auto REPLY_COMMAND_HELP =
+L"< Các lệnh của Pk9rNT >\n\
+`!set <StartSound>`: Thiết lập âm <StartSound> thành âm để bắt đầu trò chơi\n\
+`!info`: Xem thông tin hiện tại của trò chơi\n\
+`!reset`: Bắt đầu lại trò chơi";
 
-constexpr auto REPLY_COMMAND_SEE_CURRENT_SOUND = L"Từ bắt đầu hiện tại là `%ls`";
+constexpr auto REPLY_COMMAND_INFO =
+L"Âm bắt đầu hiện tại: `%ls`\n\
+Lượt chơi thứ: %d";
 #pragma endregion
 
 
@@ -73,7 +79,7 @@ constexpr auto COMMAND_SET = L"!set ";
 constexpr auto LENGTH_COMMAND_SET = 5;
 constexpr auto COMMAND_CHAT = L"> ";
 constexpr auto COMMAND_RESET = L"!reset";
-constexpr auto COMMAND_SEE_CURRENT_WORD = L"!current";
+constexpr auto COMMAND_INFO = L"!info";
 constexpr auto COMMAND_HELP = L"!help";
 #pragma endregion
 

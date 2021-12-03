@@ -78,7 +78,7 @@ public:
 		uint16_t encode1 = encodingSoundToUInt16(sounds[0]);
 		uint16_t encode2 = encodingSoundToUInt16(sounds[1]);
 
-		return (uint32_t)encode1 << 16 + encode2;
+		return ((uint32_t)encode1 << 16) + encode2;
 	}
 
 	/// <summary>
