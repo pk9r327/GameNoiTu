@@ -1,5 +1,0 @@
-11 28 152 12
-gi,gin,pin,quynh,quyên,quyêt,sưn,yêm,yên,yêt,yêu
-,b,c,ch,d,g,gh,gi,h,k,kh,l,m,n,ng,ngh,nh,ph,q,qu,r,s,t,th,tr,v,x,đ
-a,ac,ach,ai,am,an,ang,anh,ao,ap,at,au,ay,e,ec,em,en,eng,eo,ep,et,i,ia,ich,im,in,inh,ip,it,iu,iêc,iêm,iên,iêng,iêp,iêt,iêu,o,oa,oac,oach,oai,oam,oan,oang,oanh,oao,oap,oat,oay,oc,oe,oem,oen,oeo,oet,oi,om,on,ong,oong,op,ot,oăc,oăm,oăn,oăng,oăt,u,ua,uc,ui,um,un,ung,up,ut,uy,uya,uych,uynh,uyt,uyu,uyên,uyêt,uân,uâng,uât,uây,uê,uêch,uênh,uôc,uôi,uôm,uôn,uông,uôt,uơ,y,âc,âm,ân,âng,âp,ât,âu,ây,ê,êch,êm,ên,êng,ênh,êp,êt,êu,ô,ôc,ôi,ôm,ôn,ông,ôp,ôt,ăc,ăm,ăn,ăng,ăp,ăt,ơ,ơi,ơm,ơn,ơp,ơt,ư,ưa,ưc,ưi,ưng,ưt,ưu,ươc,ươi,ươm,ươn,ương,ươp,ươt,ươu
-aáàảãạ,eéèẻẽẹ,iíìỉĩị,oóòỏõọ,uúùủũụ,yýỳỷỹỵ,âấầẩẫậ,êếềểễệ,ôốồổỗộ,ăắằẳẵặ,ơớờởỡợ,ưứừửữự
